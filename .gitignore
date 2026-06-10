@@ -1,0 +1,21 @@
+# Secrets
+.env
+
+# Python
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Data — raw PDFs can be large; keep the folder, ignore the contents
+data/*
+!data/.gitkeep
+
+# Eval outputs
+eval/results/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/

@@ -1,0 +1,13 @@
+# Locked v1 stack — pin exact versions after first `pip freeze`.
+llama-index
+llama-index-vector-stores-postgres
+llama-index-embeddings-openai
+llama-index-llms-openai
+llama-index-retrievers-bm25
+ragas
+fastapi
+uvicorn[standard]
+psycopg2-binary
+pypdf
+python-dotenv
+pydantic
