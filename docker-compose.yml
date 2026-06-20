@@ -1,0 +1,49 @@
+# Brings up the whole local stack: a pgvector database and the FastAPI app.
+#
+#   docker compose up -d                       # start db + app
+#   docker compose run --rm app python src/ingest.py   # one-time index (needs data/ + key)
+#
+# The app talks to the db over the compose network by service name ("db"),
+# which is why PGHOST is "db" here rather than "localhost".
+
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: immigration_rag
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # Auto-create the vector extension the first time the volume is initialized.
+      - ./scripts/init-pgvector.sql:/docker-entrypoint-initdb.d/init-pgvector.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d immigration_rag"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  app:
+    build: .
+    environment:
+      # Point at the db service instead of localhost. The rest match the db creds.
+      PGHOST: db
+      PGPORT: "5432"
+      PGDATABASE: immigration_rag
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      # OPENAI_API_KEY is read from your shell / .env (not committed).
+      OPENAI_API_KEY: ${OPENAI_API_KEY:?set OPENAI_API_KEY in your environment or .env}
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount the PDFs so `ingest.py` run in this container can read them.
+      - ./data:/app/data:ro
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
