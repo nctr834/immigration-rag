@@ -12,9 +12,10 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Now the source and the committed text corpus (ingest reads data/*.txt). Only
-# the .txt is copied; the raw PDFs are not in the image (or in git).
+# Source, the Gradio UI (mounted at /ui), and the committed text corpus (ingest
+# reads data/*.txt). Only the .txt is copied; the raw PDFs are not in the image.
 COPY src/ ./src/
+COPY ui/ ./ui/
 COPY data/*.txt ./data/
 
 # Render injects $PORT; default to 8000 locally.

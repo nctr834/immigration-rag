@@ -1,21 +1,20 @@
-"""One-page Gradio UI over the RAG API.
+"""Gradio UI for the RAG pipeline, mounted onto the FastAPI app at /ui.
 
-A thin HTTP client: it POSTs the question to the API's /query and shows the
-answer with its sources. Point it at a running API with API_URL (defaults to a
-local instance).
-
-    API_URL=http://localhost:8000 python ui/app.py
+It calls generate() in-process rather than POSTing to the API's own /query: the
+UI and the API run in the same process, so a round-trip through HTTP would just
+serialize JSON to talk to itself. See api.py for the mount.
 """
 
 from __future__ import annotations
 
 import os
+import sys
 
 import gradio as gr
-import httpx
 
-API_URL = os.getenv("API_URL", "http://localhost:8000").rstrip("/")
-TIMEOUT = 60.0  # cold starts and generation can be slow on free tiers
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
+
+from generate import generate
 
 EXAMPLES = [
     "Can the Form I-864 Affidavit of Support requirement be waived?",
@@ -26,42 +25,40 @@ EXAMPLES = [
 
 
 def ask(question: str) -> tuple[str, str]:
-    """POST the question to the API and return (answer, sources-as-markdown)."""
+    """Answer the question and return (answer, sources-as-markdown)."""
     question = (question or "").strip()
     if not question:
         return "Enter a question.", ""
     try:
-        resp = httpx.post(
-            f"{API_URL}/query", json={"question": question}, timeout=TIMEOUT
+        result = generate(question)
+    except Exception as e:  # surface the error in the UI rather than 500-ing
+        return f"Error: {e}", ""
+    sources_md = "\n".join(f"- {s}" for s in result.sources) if result.sources else "_none_"
+    return result.answer, sources_md
+
+
+def build_demo() -> gr.Blocks:
+    with gr.Blocks(title="Immigration RAG") as demo:
+        gr.Markdown(
+            "# Immigration RAG\n"
+            "Ask about USCIS immigration forms. Answers are grounded in the "
+            "instruction documents, with sources."
         )
-        resp.raise_for_status()
-    except httpx.HTTPStatusError as e:
-        detail = e.response.json().get("detail", e.response.text)
-        return f"API error ({e.response.status_code}): {detail}", ""
-    except httpx.HTTPError as e:
-        return f"Could not reach the API at {API_URL}: {e}", ""
+        question = gr.Textbox(label="Question", placeholder="Can the I-864 be waived?")
+        ask_btn = gr.Button("Ask", variant="primary")
+        answer = gr.Textbox(label="Answer", lines=6)
+        sources = gr.Markdown(label="Sources")
+        gr.Examples(EXAMPLES, inputs=question)
 
-    data = resp.json()
-    sources = data.get("sources", [])
-    sources_md = "\n".join(f"- {s}" for s in sources) if sources else "_none_"
-    return data.get("answer", ""), sources_md
+        ask_btn.click(ask, inputs=question, outputs=[answer, sources])
+        question.submit(ask, inputs=question, outputs=[answer, sources])
+    return demo
 
 
-with gr.Blocks(title="Immigration RAG") as demo:
-    gr.Markdown(
-        "# Immigration RAG\n"
-        "Ask about USCIS immigration forms. Answers are grounded in the "
-        "instruction documents, with sources."
-    )
-    question = gr.Textbox(label="Question", placeholder="Can the I-864 be waived?")
-    ask_btn = gr.Button("Ask", variant="primary")
-    answer = gr.Textbox(label="Answer", lines=6)
-    sources = gr.Markdown(label="Sources")
-    gr.Examples(EXAMPLES, inputs=question)
-
-    ask_btn.click(ask, inputs=question, outputs=[answer, sources])
-    question.submit(ask, inputs=question, outputs=[answer, sources])
+demo = build_demo()
 
 
 if __name__ == "__main__":
+    # Standalone run (UI only, no REST endpoint). Normally the UI is served by
+    # api.py at /ui; this is just for working on the UI in isolation.
     demo.launch(server_name="0.0.0.0", server_port=int(os.getenv("UI_PORT", "7860")))

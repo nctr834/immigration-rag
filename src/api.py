@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import logging
+import os
+import sys
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException
@@ -68,3 +70,17 @@ def query(req: QueryRequest) -> Answer:
     except Exception as e:
         logger.exception("query failed for question=%r", req.question)
         raise HTTPException(status_code=502, detail="answer generation failed") from e
+
+
+# Mount the Gradio UI at /ui so the REST API and the UI are one service. The UI
+# calls generate() in-process, not over HTTP. Optional: if gradio isn't
+# installed (e.g. the test/CI env), the API still serves /query and /health.
+try:
+    import gradio as gr
+
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "ui"))
+    from app import demo as _ui_demo
+
+    app = gr.mount_gradio_app(app, _ui_demo, path="/ui")
+except ImportError:
+    logger.info("gradio not installed; skipping /ui mount")

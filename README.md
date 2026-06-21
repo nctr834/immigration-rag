@@ -147,18 +147,14 @@ items.
 
 ## The Gradio UI
 
-A one-page UI over the API, for asking questions without curl. It is a thin HTTP
-client, so the API must be running and reachable at `API_URL`.
-
-```bash
-pip install -r requirements-ui.txt
-API_URL=http://localhost:8000 python ui/app.py   # -> http://localhost:7860
-```
+A one-page UI for asking questions without curl. It is mounted onto the same
+FastAPI app at `/ui` and calls `generate()` in-process, so it ships with the API
+as one service. With the app running, open `http://localhost:8000/ui`.
 
 ## Deploy (Render)
 
-`render.yaml` provisions a Dockerized web service and a managed Postgres with
-pgvector.
+`render.yaml` provisions one Dockerized web service (REST API at `/query`, UI at
+`/ui`) and a managed Postgres with pgvector.
 
 1. On Render: New -> Blueprint, point it at this repo. It reads `render.yaml`.
 2. Set `OPENAI_API_KEY` when prompted (it is not committed). `DATABASE_URL` is
@@ -167,11 +163,8 @@ pgvector.
    ingest against the live DB: `PYTHONPATH=src python ingest.py --extract`.
    This creates the `vector` extension, embeds the committed `data/*.txt`, and
    fills pgvector.
-4. Hit `https://<your-app>.onrender.com/query`. Paste that URL into the live-demo
-   line at the top of this README.
-
-The UI deploys separately (e.g. Hugging Face Spaces) with `API_URL` pointed at
-the Render URL.
+4. Visit `https://<your-app>.onrender.com/ui` for the UI, or POST to `/query`.
+   Paste the URL into the live-demo line at the top of this README.
 
 Cold start: the Render free tier sleeps after inactivity, so the first request
 after idle takes ~30s to wake the service. A periodic ping to `/health` keeps it
