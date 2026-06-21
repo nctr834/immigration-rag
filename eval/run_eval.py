@@ -218,7 +218,9 @@ def _print_table(title: str, base: dict[str, float], hyb: dict[str, float]) -> N
         f"{'Metric':<18}{'Baseline (vector)':>20}{'Hybrid (vec+BM25)':>20}{'delta':>10}"
     )
     for name in METRIC_NAMES:
-        b, h = base[name], hyb[name]
+        # Round before subtracting so the printed delta matches the two columns
+        # (subtracting the full-precision averages can disagree by 0.01).
+        b, h = round(base[name], 2), round(hyb[name], 2)
         print(f"{_LABELS[name]:<18}{b:>20.2f}{h:>20.2f}{h - b:>+10.2f}")
 
 

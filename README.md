@@ -29,14 +29,14 @@ the difference is attributable to retrieval.
 
 | Metric            | Baseline (vector) | Hybrid (vector + BM25) | delta |
 | ----------------- | ----------------- | ---------------------- | ----- |
-| Faithfulness      | 0.95              | 0.97                   | +0.01 |
-| Answer relevancy  | 0.78              | 0.83                   | +0.04 |
+| Faithfulness      | 0.95              | 0.97                   | +0.02 |
+| Answer relevancy  | 0.78              | 0.83                   | +0.05 |
 | Context precision | 0.92              | 0.94                   | +0.02 |
-| Context recall    | 0.92              | 0.93                   | +0.02 |
+| Context recall    | 0.92              | 0.93                   | +0.01 |
 
 The gains are modest but consistent. Breaking the set down by question type shows
 where hybrid actually helps: on conceptual questions context precision rose +0.08
-(0.91 -> 0.99) and recall +0.05, while on exact-token questions (form numbers
+(0.91 -> 0.99) and recall +0.04 (0.92 -> 0.96), while on exact-token questions (form numbers
 like "I-864") the two were within noise. The embedding model already handles form
 numbers well; BM25's lift shows up on questions where keyword overlap helps. See
 [docs/eval-optimization-log.md](docs/eval-optimization-log.md) for the full set
@@ -65,8 +65,7 @@ handles form numbers fine, and BM25's measured lift was on conceptual questions
 not for the reason expected.
 
 **LLM reranking over a wider candidate pool.** The first-stage retriever fetches
-25 candidates; an LLM reranker scores each against the question and keeps the top
-5. This was added after the eval showed a chunk that answered a question was
+25 candidates; an LLM reranker scores each against the question and keeps the top 5. This was added after the eval showed a chunk that answered a question was
 retrievable but ranked too low to make the top 5 (the question said "waived", the
 document said "exceptions"). Reranking moved it from rank 16 to rank 1.
 
