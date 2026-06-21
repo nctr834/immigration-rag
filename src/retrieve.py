@@ -11,6 +11,7 @@ poorly under fusion (e.g. "waived" in the query vs "exceptions" in the doc).
 from __future__ import annotations
 
 from dataclasses import dataclass
+from enum import Enum
 from functools import lru_cache
 from typing import TYPE_CHECKING
 
@@ -50,6 +51,18 @@ def _load_all_nodes() -> list["BaseNode"]:
     return build_vector_store().get_nodes(filters=all_rows)
 
 
+class RetrievalMode(str, Enum):
+    """Which retrievers feed the candidate pool.
+
+    VECTOR is the semantic-only baseline; HYBRID adds BM25 keyword fusion. The
+    eval compares them with everything else (chunking, model, prompt, rerank)
+    held constant, so any metric delta is attributable to retrieval.
+    """
+
+    VECTOR = "vector"
+    HYBRID = "hybrid"
+
+
 @dataclass
 class RetrievedChunk:
     """One retrieved chunk plus the metadata downstream code cites and evaluates."""
@@ -60,14 +73,16 @@ class RetrievedChunk:
 
 
 @lru_cache(maxsize=None)
-def get_retriever(pool: int = RERANK_POOL) -> "BaseRetriever":
-    """Return the hybrid vector + BM25 retriever that fetches the candidate pool.
+def get_retriever(
+    mode: RetrievalMode = RetrievalMode.HYBRID, pool: int = RERANK_POOL
+) -> "BaseRetriever":
+    """Return the retriever that fetches the candidate pool for the given mode.
 
-    Cached per pool size: reading all chunks from pgvector and building the BM25
-    index is expensive and the corpus is static within a process, so it runs
-    once instead of on every query. The pool is intentionally wider than TOP_K
-    so the reranker has enough candidates to promote a well-matching chunk that
-    fusion ranked low.
+    Cached per (mode, pool): reading all chunks from pgvector and building the
+    BM25 index is expensive and the corpus is static within a process, so it
+    runs once instead of on every query. The pool is intentionally wider than
+    TOP_K so the reranker has enough candidates to promote a well-matching chunk
+    that fusion ranked low.
     """
     require_openai_key()
 
@@ -75,9 +90,13 @@ def get_retriever(pool: int = RERANK_POOL) -> "BaseRetriever":
     index = VectorStoreIndex.from_vector_store(
         build_vector_store(), embed_model=embed_model
     )
-    retriever = QueryFusionRetriever(
+    vector_retriever = index.as_retriever(similarity_top_k=pool)
+    if mode is RetrievalMode.VECTOR:
+        return vector_retriever
+
+    return QueryFusionRetriever(
         [
-            index.as_retriever(similarity_top_k=pool),
+            vector_retriever,
             BM25Retriever.from_defaults(
                 nodes=_load_all_nodes(), similarity_top_k=pool
             ),
@@ -87,7 +106,6 @@ def get_retriever(pool: int = RERANK_POOL) -> "BaseRetriever":
         num_queries=1,
         use_async=False,
     )
-    return retriever
 
 
 @lru_cache(maxsize=None)
@@ -97,12 +115,22 @@ def get_reranker(top_k: int = TOP_K) -> "BaseNodePostprocessor":
     return LLMRerank(top_n=top_k, llm=OpenAI(model=LLM_MODEL, temperature=0))
 
 
-def retrieve(question: str, top_k: int = TOP_K) -> list[RetrievedChunk]:
-    """Fetch a candidate pool, rerank it, and return the top_k as RetrievedChunk records."""
-    candidates = get_retriever().retrieve(question)
-    nodes = get_reranker(top_k).postprocess_nodes(
-        candidates, QueryBundle(question)
-    )
+def retrieve(
+    question: str,
+    top_k: int = TOP_K,
+    mode: RetrievalMode = RetrievalMode.HYBRID,
+    rerank: bool = True,
+) -> list[RetrievedChunk]:
+    """Fetch a candidate pool, optionally rerank it, and return the top_k chunks.
+
+    mode and rerank are the eval's two knobs; production uses the defaults
+    (hybrid + rerank).
+    """
+    candidates = get_retriever(mode).retrieve(question)
+    if rerank:
+        nodes = get_reranker(top_k).postprocess_nodes(candidates, QueryBundle(question))
+    else:
+        nodes = candidates[:top_k]
     return [
         RetrievedChunk(
             text=node.get_content(),

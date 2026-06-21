@@ -123,3 +123,62 @@ so the TOC removal is justified on principle - less junk in the index - but did
 not measurably move the metrics, and is not claimed to. The chunk count dropped
 222 -> 191 because text now chunks across page boundaries instead of per page;
 the eval was unchanged by that too.
+
+## Baseline vs hybrid (the headline comparison)
+
+The eval set was grown 8 -> 24 items so one hard item could not swing the
+average, with each new item tagged exact-token (form numbers, fees, section
+citations) or conceptual, to test where hybrid actually helps.
+
+The comparison varies only retrieval mode (vector vs vector+BM25); chunking,
+model, prompt, and reranking are held constant. Reranking is turned OFF for this
+table: with it on, the reranker surfaces the same best chunk regardless of which
+first-stage retriever fed the pool, so it masks the retrieval-mode difference
+entirely (an earlier run with rerank on showed deltas of ~0.00 across the board).
+Rerank off is the apples-to-apples retrieval comparison.
+
+Overall (24 items, rerank off):
+
+| Metric | Baseline (vector) | Hybrid (vec+BM25) | delta |
+|---|---|---|---|
+| Faithfulness | 0.95 | 0.97 | +0.01 |
+| Answer relevancy | 0.78 | 0.83 | +0.04 |
+| Context precision | 0.92 | 0.94 | +0.02 |
+| Context recall | 0.92 | 0.93 | +0.02 |
+
+The gains are modest but consistent. The per-type breakdown is the interesting
+part, and it contradicted the original hypothesis:
+
+| Type | Metric | Baseline | Hybrid | delta |
+|---|---|---|---|---|
+| exact-token (7) | context precision | 0.96 | 0.94 | -0.02 |
+| exact-token (7) | context recall | 0.95 | 0.95 | +0.00 |
+| conceptual (9) | context precision | 0.91 | 0.99 | +0.08 |
+| conceptual (9) | context recall | 0.92 | 0.96 | +0.05 |
+
+The hypothesis was that BM25 helps on exact form numbers ("I-864" vs "I-864A").
+The data says the opposite: the embedding model already handles form numbers, so
+hybrid adds nothing there, while BM25's lift shows up on conceptual questions
+where keyword overlap helps. Hybrid still wins overall, just not for the reason
+expected.
+
+## Parallelizing the eval
+
+The eval was reshaped so each item runs its whole pipeline (retrieve -> generate
+-> grade) as one bounded-concurrency task. retrieve/generate are sync and are
+offloaded to threads (each gets its own pgvector connection, which is safe);
+previously they ran in a fully serial loop while only the grading was concurrent.
+
+Measured on a 12-item slice (24 item-runs), rerank off:
+
+| Concurrency | Wall clock |
+|---|---|
+| 1 (serial) | 449.8s |
+| 4 (parallel) | 285.5s |
+
+About 1.6x, not 4x: each item has an internal retrieve -> generate -> grade
+critical path, and the four grading calls per item were already concurrent in
+both runs, so only the cross-item dimension was newly parallelized. Concurrency 8
+was faster still but triggered intermittent OpenAI timeouts, so 4 is the stable
+setting; metric calls also retry transient timeouts, and a per-item failure is
+skipped rather than aborting the whole run.

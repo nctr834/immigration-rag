@@ -13,7 +13,7 @@ from llama_index.llms.openai import OpenAI
 from pydantic import BaseModel, ValidationError
 
 from config import LLM_MODEL, require_openai_key
-from retrieve import RetrievedChunk, retrieve
+from retrieve import RetrievalMode, RetrievedChunk, retrieve
 
 SYSTEM = (
     "You are an immigration-forms assistant. Answer the question using ONLY the "
@@ -45,11 +45,19 @@ def _format_context(chunks: list[RetrievedChunk]) -> str:
     return "\n\n".join(f"[{c.source}]\n{c.text}" for c in chunks)
 
 
-def generate(question: str) -> Answer:
-    """Retrieve context, ask the LLM, and return a validated Answer (retry once on failure)."""
+def generate(
+    question: str,
+    mode: RetrievalMode = RetrievalMode.HYBRID,
+    rerank: bool = True,
+) -> Answer:
+    """Retrieve context, ask the LLM, and return a validated Answer (retry once on failure).
+
+    mode and rerank pass straight through to retrieve so the eval can hold
+    generation constant while varying retrieval.
+    """
     require_openai_key()
 
-    chunks = retrieve(question)
+    chunks = retrieve(question, mode=mode, rerank=rerank)
     if not chunks:
         raise ValueError(f"No chunks found for question: {question}")
 

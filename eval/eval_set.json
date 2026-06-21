@@ -46,5 +46,117 @@
     "question": "Which public benefits does USCIS consider in a public charge inadmissibility determination?",
     "ground_truth": "USCIS limits the public benefits it considers in a public charge inadmissibility determination to public cash assistance for income maintenance and long-term institutionalization at government expense. Many other programs are not considered, and the guidance provides a non-exhaustive list of programs that are excluded.",
     "source": "20221219-PublicChargeFinalRule.pdf (Policy Highlights)"
+  },
+  {
+    "id": "q009",
+    "question": "What income level must a sponsor demonstrate on Form I-864?",
+    "ground_truth": "By signing Form I-864, the sponsor agrees to maintain the intending immigrant(s) and the rest of the sponsor's household at 125 percent of the Federal Poverty Guidelines. The threshold is 100 percent if the sponsor is on active duty in the U.S. Armed Forces or U.S. Coast Guard and is sponsoring their spouse or child.",
+    "source": "i-864instr.txt (Sponsor's obligation / poverty guidelines)",
+    "type": "exact-token"
+  },
+  {
+    "id": "q010",
+    "question": "What is Form I-864EZ?",
+    "ground_truth": "Form I-864EZ, Affidavit of Support Under Section 213A of the INA, is an abbreviated version of Form I-864 that certain sponsors may submit instead of Form I-864 in certain circumstances.",
+    "source": "i-485instr.txt (Affidavit of Support)",
+    "type": "exact-token"
+  },
+  {
+    "id": "q011",
+    "question": "Does a joint sponsor on Form I-864 have to be related to the intending immigrant?",
+    "ground_truth": "No. A joint sponsor does not have to be related to the intending immigrant. A joint sponsor accepts joint responsibility with the petitioning sponsor for supporting the intending immigrant; there may be at most two joint sponsors.",
+    "source": "i-864instr.txt (Joint sponsor)",
+    "type": "exact-token"
+  },
+  {
+    "id": "q012",
+    "question": "Must Form I-693 be submitted in a sealed envelope?",
+    "ground_truth": "Yes. Among the requirements for a Form I-693 submitted to USCIS, the form must still be valid and must be in a sealed envelope as detailed in the form's instructions.",
+    "source": "policy-manual-vol8-partB-ch4-medical.txt (Complete Form)",
+    "type": "exact-token"
+  },
+  {
+    "id": "q013",
+    "question": "What does INA section 245(i) allow?",
+    "ground_truth": "INA section 245(i) allows certain applicants who are otherwise barred from adjustment of status under INA 245(a) (for example, due to an unlawful entry or unauthorized employment) to still adjust status, if they are the beneficiary of a qualifying immigrant petition or labor certification filed by the applicable cutoff date. Applicants relying on 245(i) file Supplement A to Form I-485.",
+    "source": "i-485instr.txt (Exception Under INA section 245(i))",
+    "type": "exact-token"
+  },
+  {
+    "id": "q014",
+    "question": "What is the purpose of Form I-485?",
+    "ground_truth": "Form I-485, Application to Register Permanent Residence or Adjust Status, is used by an applicant already in the United States to apply for lawful permanent resident status (a Green Card) without having to return to their home country to complete visa processing.",
+    "source": "i-485instr.txt (What Is the Purpose of Form I-485?)",
+    "type": "conceptual"
+  },
+  {
+    "id": "q015",
+    "question": "Who is eligible to be a household member for purposes of Form I-864A?",
+    "ground_truth": "A household member who may sign Form I-864A must be at least 18 years old and one of the following: the intending immigrant (if the sponsor relies on the immigrant's continuing income to support the immigrant's spouse or children); the sponsor's spouse; or a parent, child, adult son or daughter, or sibling who has the same principal residence as the sponsor.",
+    "source": "i-864ainstr.txt (Who May Be Considered a Household Member)",
+    "type": "conceptual"
+  },
+  {
+    "id": "q016",
+    "question": "Can someone adjust status if an adjustment bar applies to them?",
+    "ground_truth": "Generally a person is ineligible for adjustment of status under INA section 245(a) if one or more adjustment bars apply (see INA sections 245(a), (c), (d), and/or (e)). However, they may still be able to adjust under INA section 245(i) by filing Supplement A to Form I-485, or another exemption may apply.",
+    "source": "i-485instr.txt (Bars to Adjustment of Status)",
+    "type": "conceptual"
+  },
+  {
+    "id": "q017",
+    "question": "Who completes and signs Form I-864A?",
+    "ground_truth": "Each Form I-864A must be completed and signed by two individuals: the sponsor who is completing Form I-864, and a household member of the sponsor who is promising to make his or her income and/or assets available to help support the intending immigrant.",
+    "source": "i-864ainstr.txt (What Is the Purpose of Form I-864A?)",
+    "type": "conceptual"
+  },
+  {
+    "id": "q018",
+    "question": "Does a K-3 spouse use the same petition as a K-1 fiance(e)?",
+    "ground_truth": "Yes, both are classified using Form I-129F. Form I-129F is used to classify an alien fiance(e) as a K-1 nonimmigrant or an alien spouse of a U.S. citizen as a K-3 nonimmigrant. A K-3 applies for the K-3 visa in the country where the marriage took place.",
+    "source": "i-129finstr.txt (What is the Purpose of Form I-129F?)",
+    "type": "exact-token"
+  },
+  {
+    "id": "q019",
+    "question": "Does divorce end a sponsor's Form I-864 support obligation?",
+    "ground_truth": "No. Divorce does not end the sponsorship obligation. The obligation ends only if the sponsor or the sponsored immigrant dies, if the sponsored immigrant becomes a U.S. citizen, if the immigrant is credited with 40 qualifying quarters of work, if the immigrant ceases to be a lawful permanent resident and departs the U.S., or if the immigrant is no longer a lawful permanent resident.",
+    "source": "i-864instr.txt (Obligation)",
+    "type": "conceptual"
+  },
+  {
+    "id": "q020",
+    "question": "Who reviews the medical documentation completed by a panel physician overseas?",
+    "ground_truth": "A State Department consular officer reviews the medical documentation completed by a panel physician as part of the overseas visa process, so a USCIS officer may assume that the medical documentation is properly completed.",
+    "source": "policy-manual-vol8-partB-ch4-medical.txt (Documentation Completed by Panel Physician)",
+    "type": "conceptual"
+  },
+  {
+    "id": "q021",
+    "question": "What happens if a Form I-693 has a deficiency?",
+    "ground_truth": "If the requirements are not met, or if there is evidence that the form or its envelope has been tampered with, the officer should issue a Request for Evidence (RFE) to correct the deficiencies. A response is acceptable if a civil surgeon corrects and re-signs the original, completes an entirely new Form I-693, or completes the deficient parts of a new form, in each case placing it in a sealed envelope delivered to USCIS.",
+    "source": "policy-manual-vol8-partB-ch4-medical.txt (Request for Evidence)",
+    "type": "conceptual"
+  },
+  {
+    "id": "q022",
+    "question": "Must a Form I-129F petitioner have met the fiance(e) in person?",
+    "ground_truth": "Generally yes. The petitioner and fiance(e) must have met in person within the two years immediately before filing Form I-129F. This requirement may be waived if meeting in person would violate strict and long-established customs of the fiance(e)'s foreign culture or social practice, or if it would result in extreme hardship to the petitioner.",
+    "source": "i-129finstr.txt (Who May File Form I-129F?)",
+    "type": "conceptual"
+  },
+  {
+    "id": "q023",
+    "question": "May a sponsor count a household member's income to meet the I-864 requirement?",
+    "ground_truth": "Yes. A sponsor who cannot meet the income requirement on their own income alone may rely on the income and/or assets of a household member, who must complete and sign Form I-864A. A separate Form I-864A is required for each such household member.",
+    "source": "i-864ainstr.txt (What Is the Purpose of Form I-864A?)",
+    "type": "conceptual"
+  },
+  {
+    "id": "q024",
+    "question": "What forms do panel physicians use to record an overseas immigration medical exam?",
+    "ground_truth": "Panel physicians annotate the results of the overseas immigration medical examination on the Electronic Medical Examination for Visa or Refugee Applicant (Form DS-7794) or the Medical Examination for Visa or Refugee Applicant (Form DS-2054), and related worksheets. Civil surgeons in the United States use Form I-693 instead.",
+    "source": "policy-manual-vol8-partB-ch4-medical.txt (Results of the Medical Examination)",
+    "type": "exact-token"
   }
 ]
