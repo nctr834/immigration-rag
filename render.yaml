@@ -1,0 +1,28 @@
+# Render blueprint: a Dockerized FastAPI web service backed by managed Postgres
+# with pgvector. Deploy by pointing Render at this repo (New -> Blueprint).
+#
+# After the first deploy, run the one-time ingest against the provisioned DB
+# (Render Shell on the web service):
+#   PYTHONPATH=src python ingest.py --extract
+#
+# OPENAI_API_KEY is marked sync:false so Render prompts for it instead of
+# committing it here.
+
+databases:
+  - name: immigration-rag-db
+    plan: free
+    postgresMajorVersion: "16"
+
+services:
+  - type: web
+    name: immigration-rag
+    runtime: docker
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: immigration-rag-db
+          property: connectionString

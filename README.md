@@ -3,14 +3,11 @@
 Ask questions about USCIS immigration forms and get answers grounded in the
 actual instruction documents, with citations.
 
-I built this while going through the K-1 fiancé visa process. The USCIS
-instructions are long, cross-referenced PDFs (the I-485 instructions alone run
-40+ pages), and finding the one paragraph that answers your question means
-reading all of them. This indexes the forms and answers the question directly,
-pointing back to the source.
-
-<!-- TODO: rewrite the two paragraphs above in your own words / fix any details
-I got wrong about your situation. -->
+I built this while going through the K-1 fiancé visa process. The instructions
+are long, cross-referenced PDFs (the I-485 instructions alone run 40+ pages), and
+answering one question often means reading all of them to find the paragraph that
+applies. This indexes the forms and answers directly, pointing back to the
+source so the answer is checkable.
 
 **Live demo:** <!-- paste the Render URL once deployed -->
 
@@ -87,10 +84,16 @@ unvalidated in a request path.
 
 ## What the eval caught
 
-<!-- TODO: pick one question that scored badly and write 2-3 plain sentences:
-what the question was, why it failed (bad chunk boundary? wrong retrieval?
-missing context?), and what you'd change. This is worth more than a high
-average score. -->
+The question "Can the Form I-864 be waived?" kept scoring badly: context recall
+0.20, and the answer hedged. The chunk that answers it does exist in the corpus
+(the "Are There Exceptions to Who Needs to Submit Form I-864?" section), but it
+was ranked 16th, below the top 5 that reach the model. The cause was a vocabulary
+mismatch: the question says "waived", the document says "exceptions" / "do not
+need to file", so neither keyword nor embedding search ranked it highly. Adding an
+LLM reranker over a wider candidate pool moved that chunk from rank 16 to rank 1
+and recall to 1.00. The fix came from reading one bad score, not the average; the
+full set of experiments is in
+[docs/eval-optimization-log.md](docs/eval-optimization-log.md).
 
 ## Pipeline
 
@@ -141,3 +144,35 @@ uvicorn src.api:app --reload                 # serve POST /query
 `run_eval.py` flags: `--rerank` scores with the production reranker on,
 `--serial` forces single-threaded (for timing), `--limit N` runs the first N
 items.
+
+## The Gradio UI
+
+A one-page UI over the API, for asking questions without curl. It is a thin HTTP
+client, so the API must be running and reachable at `API_URL`.
+
+```bash
+pip install -r requirements-ui.txt
+API_URL=http://localhost:8000 python ui/app.py   # -> http://localhost:7860
+```
+
+## Deploy (Render)
+
+`render.yaml` provisions a Dockerized web service and a managed Postgres with
+pgvector.
+
+1. On Render: New -> Blueprint, point it at this repo. It reads `render.yaml`.
+2. Set `OPENAI_API_KEY` when prompted (it is not committed). `DATABASE_URL` is
+   wired to the database automatically.
+3. After the first deploy, open the web service's Shell and run the one-time
+   ingest against the live DB: `PYTHONPATH=src python ingest.py --extract`.
+   This creates the `vector` extension, embeds the committed `data/*.txt`, and
+   fills pgvector.
+4. Hit `https://<your-app>.onrender.com/query`. Paste that URL into the live-demo
+   line at the top of this README.
+
+The UI deploys separately (e.g. Hugging Face Spaces) with `API_URL` pointed at
+the Render URL.
+
+Cold start: the Render free tier sleeps after inactivity, so the first request
+after idle takes ~30s to wake the service. A periodic ping to `/health` keeps it
+warm.
