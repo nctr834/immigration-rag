@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "id": "q001",
+    "question": "Does the medical exam from the K-1 consular process carry over to the I-485?",
+    "ground_truth": "Generally yes, if the I-485 is filed within one year of the overseas medical exam and no Class A condition was found; some vaccinations may still need updating.",
+    "source": "USCIS Policy Manual / I-485 instructions"
+  },
+  {
+    "id": "q002",
+    "question": "Can the Form I-864 Affidavit of Support requirement be waived?",
+    "ground_truth": "TODO: write the verified answer from the I-864 instructions / Policy Manual (e.g., self-petitioners, those credited with 40 qualifying quarters, certain children acquiring citizenship).",
+    "source": "TODO: I-864 instructions / USCIS Policy Manual"
+  },
+  {
+    "id": "q003",
+    "question": "After entering on a K-1 visa, who must the beneficiary marry to be eligible to adjust status?",
+    "ground_truth": "TODO: write the verified answer (must marry the same K-1 petitioner within 90 days of admission).",
+    "source": "TODO: I-485 instructions / K-1 guidance"
+  },
+  {
+    "id": "q004",
+    "question": "TODO: replace with a real question you had during your K-1 / AOS process.",
+    "ground_truth": "TODO: answer you verified against the source document text.",
+    "source": "TODO: the document you verified it against"
+  }
+]

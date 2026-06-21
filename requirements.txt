@@ -1,10 +1,18 @@
-# Locked v1 stack — pin exact versions after first `pip freeze`.
+# Pin exact versions after first `pip freeze`.
 llama-index
+llama-index-readers-file  # registers the PDF reader for SimpleDirectoryReader; without it PDFs are read as raw bytes
 llama-index-vector-stores-postgres
 llama-index-embeddings-openai
 llama-index-llms-openai
 llama-index-retrievers-bm25
 ragas
+# ragas pulls langchain transitively but caps no version; langchain 1.x removes
+# imports ragas still uses, so pin the family <1.
+langchain<1
+langchain-core<1
+langchain-community<1
+langchain-openai<1
+langchain-text-splitters<1
 fastapi
 uvicorn[standard]
 psycopg2-binary

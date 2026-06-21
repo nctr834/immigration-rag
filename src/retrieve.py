@@ -10,15 +10,17 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from config import TOP_K, require_openai_key
+from config import EMBED_MODEL, TOP_K, require_openai_key
 from ingest import build_vector_store
 from llama_index.core import VectorStoreIndex
 from llama_index.core.retrievers import QueryFusionRetriever
+from llama_index.core.retrievers.fusion_retriever import FUSION_MODES
 from llama_index.core.vector_stores.types import (
     FilterOperator,
     MetadataFilter,
     MetadataFilters,
 )
+from llama_index.embeddings.openai import OpenAIEmbedding
 from llama_index.retrievers.bm25 import BM25Retriever
 
 if TYPE_CHECKING:
@@ -53,7 +55,10 @@ def get_retriever(top_k: int = TOP_K) -> "BaseRetriever":
     """Return the hybrid vector + BM25 retriever used for all queries."""
     require_openai_key()
 
-    index = VectorStoreIndex.from_vector_store(build_vector_store())
+    embed_model = OpenAIEmbedding(model=EMBED_MODEL)
+    index = VectorStoreIndex.from_vector_store(
+        build_vector_store(), embed_model=embed_model
+    )
     retriever = QueryFusionRetriever(
         [
             index.as_retriever(similarity_top_k=top_k),
@@ -61,6 +66,8 @@ def get_retriever(top_k: int = TOP_K) -> "BaseRetriever":
                 nodes=_load_all_nodes(), similarity_top_k=top_k
             ),
         ],
+        similarity_top_k=top_k,
+        mode=FUSION_MODES.RECIPROCAL_RANK,
         num_queries=1,
         use_async=True,
     )
