@@ -73,8 +73,12 @@ not for the reason expected.
 retrievable but ranked too low to make the top 5 (the question said "waived", the
 document said "exceptions"). Reranking moved it from rank 16 to rank 1.
 
-**Chunking: SentenceSplitter, 512 / 50.** <!-- TODO: why this size, and why you
-fixed it rather than tuning it. A sentence or two. -->
+**Chunking: SentenceSplitter, 512 / 50.** 512 tokens is large enough to keep a
+form's instruction (a requirement plus its conditions) in one chunk, and small
+enough that retrieval stays specific; the 50-token overlap keeps a sentence
+that straddles a boundary from being cut in half. The size was fixed rather than
+tuned: with a corpus this small, chunk-size sweeps overfit the eval set, and the
+retrieval gains came from hybrid search and reranking, not chunk size.
 
 **Structured output with one retry.** The model returns a Pydantic
 `Answer{answer, sources}` object that gets validated; a malformed response is

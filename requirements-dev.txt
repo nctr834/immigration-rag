@@ -1,0 +1,4 @@
+# Dev/test-only dependencies.
+-r requirements.txt
+pytest==9.1.1
+httpx==0.28.1  # FastAPI's TestClient needs it; not a runtime API dependency
