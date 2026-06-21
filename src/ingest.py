@@ -1,13 +1,25 @@
-"""Load USCIS PDFs from data/, chunk + embed them, and store them in pgvector.
+"""Extract USCIS PDFs to cleaned .txt, then chunk + embed the .txt into pgvector.
+
+Two stages so the cleaned text is the committed, inspectable source of truth:
+
+  - extract(): PDF -> _clean_text -> data/<name>.txt (run when PDFs change)
+  - ingest():  data/*.txt -> SentenceSplitter -> embeddings -> pgvector
 
   - Chunking:  SentenceSplitter(chunk_size=512, chunk_overlap=50)
   - Embedding: text-embedding-3-small
   - Store:     pgvector, accessed through LlamaIndex
+
+The .txt files are tracked in git; the raw PDFs are not (they extract to a
+fraction of the size). A .txt with no matching PDF, e.g. a hand-curated source,
+is left untouched by extract() and still ingested.
 """
 
 from __future__ import annotations
 
+import glob
+import os
 import re
+import sys
 from typing import TYPE_CHECKING
 
 from llama_index.core import SimpleDirectoryReader, VectorStoreIndex, StorageContext
@@ -48,15 +60,22 @@ _PAGE_HEADER_RE = re.compile(
     r"(?im)^[ \t]*Form\s+[A-Z]-\d+\w*[^\n]*?Instructions[^\n]*?Page\s+\d+\s+of\s+\d+[ \t]*\n?"
 )
 
+# Table-of-contents entries: a title, a run of dotted/underscore leader, then a
+# page number, e.g. "What Is the Purpose of Form I-485? _________ 2". Is
+# navigation with no semantic signal. Body never ends in a leader+number,
+# so this won't touch real content.
+_TOC_ENTRY_RE = re.compile(r"(?im)^.*?[._]{5,}[ \t]*\d+[ \t]*$\n?")
+
 
 def _clean_text(text: str) -> str:
-    """Strip PDF boilerplate (draft watermark, page headers) before chunking.
+    """Strip PDF boilerplate (draft watermark, page headers, TOC) before chunking.
 
     Applied to whole documents, not chunks, so a header sitting on a page
     boundary can't end up split across two chunks.
     """
     text = _WATERMARK_RE.sub("", text)
     text = _PAGE_HEADER_RE.sub("", text)
+    text = _TOC_ENTRY_RE.sub("", text)
     # Collapse the long blank-line runs PDF layout leaves behind.
     text = re.sub(r"\n[ \t]*\n([ \t]*\n)+", "\n\n", text)
     return text.strip()
@@ -70,16 +89,30 @@ def build_vector_store() -> "PGVectorStore":
     return vector_store
 
 
+def extract() -> int:
+    """Extract every PDF in data/ to a cleaned data/<name>.txt; return file count.
+
+    Cleaning (watermark/header stripping) runs here so the committed .txt is
+    exactly what gets ingested. A NUL byte is stripped because Postgres text
+    columns reject it downstream.
+    """
+    pdfs = sorted(glob.glob(os.path.join(DATA_DIR, "*.pdf")))
+    for pdf in pdfs:
+        documents = SimpleDirectoryReader(input_files=[pdf]).load_data()
+        text = _clean_text(
+            "\n".join(d.get_content().replace("\x00", "") for d in documents)
+        )
+        out = os.path.splitext(pdf)[0] + ".txt"
+        with open(out, "w", encoding="utf-8") as f:
+            f.write(text)
+    return len(pdfs)
+
+
 def ingest() -> int:
-    """Index every PDF in data/ into the vector store; return the chunk count written."""
+    """Index every .txt in data/ into the vector store; return the chunk count written."""
     require_openai_key()
 
-    documents = SimpleDirectoryReader(DATA_DIR).load_data()
-
-    # Strip boilerplate before chunking so headers at page boundaries don't end
-    # up split across chunks. Also drop NUL bytes Postgres text columns reject.
-    for doc in documents:
-        doc.set_content(_clean_text(doc.get_content().replace("\x00", "")))
+    documents = SimpleDirectoryReader(DATA_DIR, required_exts=[".txt"]).load_data()
 
     sentence_splitter = SentenceSplitter(
         chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP
@@ -106,4 +139,6 @@ def ingest() -> int:
 
 
 if __name__ == "__main__":
+    if "--extract" in sys.argv:
+        print(f"extracted {extract()} PDF(s)")
     print(ingest())
