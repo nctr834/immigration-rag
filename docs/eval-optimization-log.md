@@ -107,3 +107,19 @@ a genuine score, no longer a refusal.
 
 Final aggregates (8 items, reranking live): faithfulness 0.90, answer_relevancy
 0.86, context_precision 0.98, context_recall 0.97.
+
+## Corpus hygiene (no measured metric effect)
+
+Not every change was about scores. Ingestion was split into extract (PDF ->
+cleaned .txt) and ingest (.txt -> embeddings), so the cleaned corpus is committed
+and inspectable instead of being produced invisibly at ingest time. Making the
+text visible immediately surfaced noise: table-of-contents leader lines
+("What Is the Purpose... ____ 2") were being embedded as chunks, so a strip for
+those was added to the cleaning step.
+
+These are reproducibility and maintainability wins, not optimizations. The eval
+was flat across them (faithfulness 0.94 -> 0.92, within borderline-item noise),
+so the TOC removal is justified on principle - less junk in the index - but did
+not measurably move the metrics, and is not claimed to. The chunk count dropped
+222 -> 191 because text now chunks across page boundaries instead of per page;
+the eval was unchanged by that too.
