@@ -45,6 +45,13 @@ numbers well; BM25's lift shows up on questions where keyword overlap helps. See
 [docs/eval-optimization-log.md](docs/eval-optimization-log.md) for the full set
 of experiments.
 
+The deployed system adds an LLM reranker on top of hybrid retrieval. Against the
+vector baseline, the full system (hybrid + reranking together) scores answer
+relevancy 0.83 (up from 0.78), context precision 0.97 (up from 0.92), context
+recall 0.96 (up from 0.92), and faithfulness 0.93 (down from 0.95). The reranker
+changes individual rankings more than it changes the averages: on one question it
+moved the answering chunk from rank 16 to rank 1 (see the optimization log).
+
 ## Architecture decisions
 
 **pgvector instead of a dedicated vector DB.** The corpus is small (a few
