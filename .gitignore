@@ -8,9 +8,11 @@ __pycache__/
 *.egg-info/
 .pytest_cache/
 
-# Data — raw PDFs can be large; keep the folder, ignore the contents
+# Data — raw PDFs can be large; keep the folder, ignore the contents.
+# Derived/extracted text sources are small and diffable, so track those.
 data/*
 !data/.gitkeep
+!data/*.txt
 
 # Eval outputs
 eval/results/

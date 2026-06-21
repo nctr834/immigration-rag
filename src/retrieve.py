@@ -1,8 +1,11 @@
 """Turn a question into the top-k source chunks it should be answered from.
 
-Retrieval is a vector + BM25 fusion: semantic search over the pgvector
-embeddings, fused with BM25 keyword matching so exact tokens like form numbers
-("I-864", "I-129F") aren't blurred away. get_retriever() builds both halves.
+Retrieval is two stages. First a vector + BM25 fusion fetches a wide candidate
+pool: semantic search over the pgvector embeddings, fused with BM25 keyword
+matching so exact tokens like form numbers ("I-864", "I-129F") aren't blurred
+away. Then an LLM reranker scores each candidate against the question and keeps
+the top_k, which fixes cases where the answering chunk is retrievable but ranks
+poorly under fusion (e.g. "waived" in the query vs "exceptions" in the doc).
 """
 
 from __future__ import annotations
@@ -11,20 +14,24 @@ from dataclasses import dataclass
 from functools import lru_cache
 from typing import TYPE_CHECKING
 
-from config import EMBED_MODEL, TOP_K, require_openai_key
+from config import EMBED_MODEL, LLM_MODEL, RERANK_POOL, TOP_K, require_openai_key
 from ingest import build_vector_store
 from llama_index.core import VectorStoreIndex
+from llama_index.core.postprocessor import LLMRerank
 from llama_index.core.retrievers import QueryFusionRetriever
 from llama_index.core.retrievers.fusion_retriever import FUSION_MODES
+from llama_index.core.schema import QueryBundle
 from llama_index.core.vector_stores.types import (
     FilterOperator,
     MetadataFilter,
     MetadataFilters,
 )
 from llama_index.embeddings.openai import OpenAIEmbedding
+from llama_index.llms.openai import OpenAI
 from llama_index.retrievers.bm25 import BM25Retriever
 
 if TYPE_CHECKING:
+    from llama_index.core.postprocessor.types import BaseNodePostprocessor
     from llama_index.core.retrievers import BaseRetriever
     from llama_index.core.schema import BaseNode
 
@@ -53,12 +60,14 @@ class RetrievedChunk:
 
 
 @lru_cache(maxsize=None)
-def get_retriever(top_k: int = TOP_K) -> "BaseRetriever":
-    """Return the hybrid vector + BM25 retriever used for all queries.
+def get_retriever(pool: int = RERANK_POOL) -> "BaseRetriever":
+    """Return the hybrid vector + BM25 retriever that fetches the candidate pool.
 
-    Cached per top_k: reading all chunks from pgvector and building the BM25
+    Cached per pool size: reading all chunks from pgvector and building the BM25
     index is expensive and the corpus is static within a process, so it runs
-    once instead of on every query.
+    once instead of on every query. The pool is intentionally wider than TOP_K
+    so the reranker has enough candidates to promote a well-matching chunk that
+    fusion ranked low.
     """
     require_openai_key()
 
@@ -68,12 +77,12 @@ def get_retriever(top_k: int = TOP_K) -> "BaseRetriever":
     )
     retriever = QueryFusionRetriever(
         [
-            index.as_retriever(similarity_top_k=top_k),
+            index.as_retriever(similarity_top_k=pool),
             BM25Retriever.from_defaults(
-                nodes=_load_all_nodes(), similarity_top_k=top_k
+                nodes=_load_all_nodes(), similarity_top_k=pool
             ),
         ],
-        similarity_top_k=top_k,
+        similarity_top_k=pool,
         mode=FUSION_MODES.RECIPROCAL_RANK,
         num_queries=1,
         use_async=False,
@@ -81,16 +90,26 @@ def get_retriever(top_k: int = TOP_K) -> "BaseRetriever":
     return retriever
 
 
+@lru_cache(maxsize=None)
+def get_reranker(top_k: int = TOP_K) -> "BaseNodePostprocessor":
+    """Return the LLM reranker that trims the candidate pool to top_k."""
+    require_openai_key()
+    return LLMRerank(top_n=top_k, llm=OpenAI(model=LLM_MODEL, temperature=0))
+
+
 def retrieve(question: str, top_k: int = TOP_K) -> list[RetrievedChunk]:
-    """Embed the question and return its top_k chunks as RetrievedChunk records."""
-    retriever = get_retriever(top_k)
+    """Fetch a candidate pool, rerank it, and return the top_k as RetrievedChunk records."""
+    candidates = get_retriever().retrieve(question)
+    nodes = get_reranker(top_k).postprocess_nodes(
+        candidates, QueryBundle(question)
+    )
     return [
         RetrievedChunk(
-            text=chunk.get_content(),
-            source=chunk.node.metadata.get("file_name", chunk.node_id),
-            score=chunk.score,
+            text=node.get_content(),
+            source=node.node.metadata.get("file_name", node.node_id),
+            score=node.score,
         )
-        for chunk in retriever.retrieve(question)
+        for node in nodes
     ]
 
 if __name__ == "__main__":

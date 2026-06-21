@@ -2,8 +2,8 @@
   {
     "id": "q001",
     "question": "Does the medical exam from the K-1 consular process carry over to the I-485?",
-    "ground_truth": "Generally yes, if the I-485 is filed within one year of the overseas medical exam and no Class A condition was found; some vaccinations may still need updating.",
-    "source": "USCIS Policy Manual / I-485 instructions"
+    "ground_truth": "Generally yes. Special rules apply to certain applicants who completed their immigration medical examination overseas, including K nonimmigrants (fiance(e)s or spouses of U.S. citizens); they generally do not need to repeat the full immigration medical examination in the United States for purposes of adjustment of status. Such applicants may still have to show proof of compliance with the vaccination requirement.",
+    "source": "policy-manual-vol8-partB-ch4-medical.txt (Documentation Completed by Panel Physician)"
   },
   {
     "id": "q002",

@@ -85,3 +85,25 @@ End-to-end with rerank patched in:
 Aggregate recall went 0.78 -> 1.00, precision 0.83 -> 0.94, nothing regressed.
 Reranking is the fix because the failure was always ranking quality: the chunk
 was retrievable the whole time, just buried.
+
+Reranking is now wired into retrieve.py: get_retriever fetches RERANK_POOL=25
+candidates, get_reranker (LLMRerank, gpt-4o-mini, temp 0) trims to TOP_K. Both
+are lru_cached.
+
+## The q001 corpus gap
+
+After reranking went live, q001 ("Does the medical exam from the K-1 process
+carry over to the I-485?") dropped to faithfulness 0.00 / relevancy 0.00. This
+was not a regression: the answer was never in the corpus (its source was the
+USCIS Policy Manual, which had not been ingested). Before reranking the system
+guessed from tangential i-485 chunks; after reranking it correctly refused.
+
+The original ground_truth was also factually wrong ("valid within one year").
+Fixed by ingesting USCIS Policy Manual Vol 8 Part B Chapter 4 (medical exam
+documentation) into data/ and rewriting q001's ground_truth from the actual text
+(K nonimmigrants generally do not repeat the overseas exam, but may still need to
+show vaccination compliance). q001 recovered to faithfulness 0.67 / recall 0.75 -
+a genuine score, no longer a refusal.
+
+Final aggregates (8 items, reranking live): faithfulness 0.90, answer_relevancy
+0.86, context_precision 0.98, context_recall 0.97.

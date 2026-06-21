@@ -1,0 +1,378 @@
+USCIS Policy Manual
+Volume 8 - Admissibility, Part B - Health-Related Grounds of Inadmissibility, Chapter 4 - Review of Medical Examination Documentation
+Source: https://www.uscis.gov/policy-manual/volume-8-part-b-chapter-4
+
+Chapter 4 - Review of Medical Examination Documentation
+
+A. Results of the Medical Examination
+The physician must annotate the results of the examination on the following forms:
+Panel Physicians
+Panel physicians must annotate the results of the immigration medical examination on the Electronic Medical Examination for Visa or Refugee Applicant (Form DS-7794) or the Medical Examination for Visa or Refugee Applicant (Form DS-2054), and related worksheets.
+Civil Surgeons
+Civil surgeons must annotate the immigration medical examination results on the Report of Immigration Medical Examination and Vaccination Record (Form I-693).
+B. Documentation Completed by Panel Physician
+Since a State Department consular officer reviews the medical documentation completed by a panel physician as part of the overseas visa process, a USCIS officer may assume that the medical documentation is properly completed.[1]
+Applicants who have already been examined abroad and are not required to repeat the immigration medical examination in the United States may still have to show proof of compliance with the vaccination requirement.[2]
+C. Documentation Completed by Civil Surgeon
+1. Civil Surgeon Designation
+Except for physicians who are Public Health Service officers, only physicians designated by USCIS to act as civil surgeons may conduct an immigration medical examination in the United States and complete Form I-693.[3] Only doctors of medicine (M.D.) and doctors of osteopathy (D.O.) who are currently licensed to practice as physicians may be designated.[4] The physician must be designated as a civil surgeon at the time of the completion of the immigration medical examination.
+To determine whether the physician is designated as a civil surgeon, the officer should consult the designated civil surgeon list by using the Find a Civil Surgeon webpage.
+
+2. Complete Form
+The following requirements must always be met regarding any Form I-693 submitted to USCIS:
+The form must be completed legibly;
+All required parts of the form must be completed;[5]
+The form must be signed and dated by the civil surgeon who conducted the immigration medical examination;[6]
+The form must be signed and dated by the applicant who was examined;[7]
+If applicable, the form must be signed and dated by the physician(s) completing referral evaluations;[8]
+The form must still be valid;[9] and
+The form must be in a sealed envelope as detailed in the form’s instructions.[10]
+Officers should review Form I-693 for compliance with the procedures and requirements outlined in Centers for Disease Control's (CDC) Technical Instructions for Civil Surgeons that were in effect as of the date of the civil surgeon’s signature. An applicant is not subject to any additional requirements that do not apply to them on the day the civil surgeon signed Form I-693 unless otherwise specified by the CDC. Therefore, officers should not issue a Request for Evidence (RFE) for the applicant to submit a new or updated Form I-693 to meet requirements that did not apply to the applicant on the date the civil surgeon signed the Form I-693. For example, applicants of certain ages must be tested for gonorrhea and syphilis. If the applicant has not reached the age range for which testing is required as of the date the civil surgeon signed the Form I-693, the officer must not require the applicant to obtain the tests before final adjudication, even if the applicant reached the appropriate age for which testing is required at the time of final adjudication.
+This policy also applies if there have been updates to CDC's Technical Instructions for Civil Surgeons (unless otherwise specified by CDC),[11] USCIS policy, or if there is a new edition of Form I-693. As long as the civil surgeon complied with all procedures and requirements in CDC's Technical Instructions for Civil Surgeons and used the edition of the form that was current on the date that they signed Form I-693, the applicant’s Form I-693 can be accepted as valid for adjudicative purposes.
+Request for Evidence
+If the above requirements are not met, or if there is evidence that the form or the envelope the form was placed in has been tampered with, the officer should issue an RFE to correct any Form I-693 deficiencies. If possible, the officer should return the original Form I-693 to the applicant when issuing an RFE for corrective action. Whenever an original is returned to the applicant, the officer should retain a copy.
+A response to an RFE is acceptable if it is completed by a civil surgeon in one of the following ways:
+The civil surgeon annotates the original medical examination in the deficient part(s), and both the applicant and the civil surgeon re-sign and re-date their respective certifications. The civil surgeon must place the corrected Form I-693 in a sealed envelope and the applicant delivers the new envelope to USCIS.
+The civil surgeon completes an entirely new Form I-693, and corrects for the original deficiency. The civil surgeon must place the new Form I-693 in a sealed envelope and the applicant delivers the new envelope to USCIS.
+The civil surgeon completes the following sections of a new Form I-693: the part containing the applicant’s information,[12] the part or parts that were deficient in the original immigration medical examination, and the part containing the civil surgeon’s information and certification. The civil surgeon must include the original Form I-693 and documentation along with the newly completed Form I-693 parts and documentation. The applicant then delivers the new envelope to USCIS.
+3. Signatures
+The applicant, the civil surgeon, and any other health care provider who evaluated the applicant as part of the immigration medical examination must sign the form, according to the form instructions, to verify that the content of their representations is truthful.
+Signature of the Civil Surgeon
+The civil surgeon’s signature must be an original signature. Stamps of the physician’s signature or other substitutes, or copies of the civil surgeon’s original signature, are not acceptable (except for blanket-designated health departments or military physicians as described below).
+As outlined in the CDC’s Technical Instructions for Civil Surgeons, the civil surgeon is only permitted to sign the Form I-693 after the civil surgeon has completed the entire immigration medical examination. An examination is not completed until any necessary prescribed treatment for a Class A condition has been administered.
+There may be circumstances when an applicant refuses to undergo one part of the immigration medical examination, but the civil surgeon certifies the form with a notation that part of the examination is not complete. In these cases, the officer should issue an RFE to the applicant for corrective action.
+The civil surgeon might also diagnose a Class A condition for which the applicant refuses treatment. The civil surgeon might then annotate the Class A condition but still certify and sign the form. In this case, the officer should not return the form for corrective action. The officer should determine that the applicant is inadmissible and ask the applicant to request a waiver, if available.[13]
+Signature of the Health Department
+In agreement with CDC, USCIS granted blanket civil surgeon designation to local and state health departments in the United States. This blanket designation allows health departments to complete the vaccination portion of Form I-693 for refugees seeking adjustment if they have a physician who meets the professional qualifications for a civil surgeon. If a refugee only requires the vaccination assessment, the only parts of the form that need to be completed are the applicant’s information, the vaccination assessment, and the certifications. The other parts are irrelevant and do not have to be submitted.
+If the health department physician is completing only a vaccination assessment for refugees seeking adjustment, the physician’s signature may be either an original (handwritten) or a stamped signature, as long as it is the signature of the health department physician. The attending nurse may, but does not have to, co-sign with the physician. The signature of the physician must be accompanied by the health department’s stamp or raised seal, whichever is customarily used.
+If the health department does not properly sign, the officer should return the medical documentation to the applicant for corrective action.[14]
+Signature of a Military Physician Designated as a Civil Surgeon for Members and Veterans of the Armed Forces
+To ease the difficulties encountered by physicians and applicants in the military, USCIS issued a blanket civil surgeon designation to qualifying military physicians to permit them to perform the immigration medical examination and complete the Form I-693 for eligible members and veterans of the U.S. armed forces and their dependents.[15]
+As agreed upon by USCIS and the CDC, military physicians who qualify under this blanket civil surgeon designation may perform the entire immigration medical examination as long as the examination is conducted in the United States on the premises of a Military Treatment Facility (MTF) and conducted for a U.S. armed forces member, veteran, or dependent who is eligible to receive medical care at the MTF.
+If operating under the blanket civil surgeon designation for military physicians, a physician’s signature may be either an original (handwritten) or stamped signature, as long as it is the signature of a qualifying military physician. Nurses and other health care professionals may, but are not required to, co-sign the form. The signature of the physician must be accompanied by the official stamp or raised seal of the MTF, whichever is customarily used.
+If the military physician does not properly sign, the officer should return the medical documentation to the applicant for corrective action.
+Signature of the Applicant
+The applicant or the civil surgeon may complete the section about the applicant’s information. The civil surgeon must always verify the applicant’s identity by requiring a government-issued identification (ID), as stated in CDC’s Technical Instructions for Civil Surgeons.
+The applicant must sign the certification only when instructed by the civil surgeon, at the beginning of the immigration medical examination. By signing the form, the applicant attests that they consent to the immigration medical examination and that any information provided in relation to the examination is truthful.
+Whenever the civil surgeon orders a test that they do not perform personally, the civil surgeon must ensure that the physician or staff to whom the applicant is referred checks the identity of the applicant by requesting a government-issued ID.[16]
+An officer should follow the chart below to determine whether the applicant or a legal guardian must sign the form.[17]
+Signature of the ApplicantAge of ApplicantSignature Requirement
+Age 14 and OlderThe applicant must sign Form I-693. However, a legal guardian may sign for a mentally incompetent person.
+Under Age 14Either the applicant, a parent, or legal guardian may sign the Form I-693. The officer should not reject the form as improperly completed if only the applicant, parent, or guardian signs.
+Signature of Physicians Receiving Referrals for Evaluation
+If the civil surgeon is unable to perform a particular medical assessment, the civil surgeon is required to refer the applicant to another physician. The physician receiving the referral is required to complete the appropriate section on Form I-693 after the civil surgeon has completed the evaluation of the applicant’s condition. The civil surgeon may not sign the civil surgeon’s certification on the form until the civil surgeon has received and reviewed the report of the physician who received the referral. If the referring physician ordered treatment, the civil surgeon may not sign the certification until the treatment has been completed.
+Contracted services used by the civil surgeon to complete a step in the medical examination are not considered referrals. Therefore, the referral section can be blank in such cases.[18] For example, if the civil surgeon uses a contractor to draw blood, the referral section does not have to be completed. However, if the CDC's Technical Instructions for Civil Surgeons require a referral to the health department because of the applicant’s Tuberculosis (TB) classification, the officer must make sure that the referral section is completed.
+The officer must closely examine the TB results and should not issue an RFE for a TB health department referral if the applicant was found to have latent TB infection. In this circumstance, the civil surgeon is required only to report to the health department, not refer. The reporting process is not captured on Form I-693.[19]
+4. Evidence, Validity, USCIS Discretion, and Burden of Proof
+Form I-693 and the Health-Related Grounds of Inadmissibility
+In general, aliens applying for immigration benefits who are required to demonstrate that they are admissible, such as adjustment of status applicants, must submit a Form I-693 to show they are free from any conditions that would render them inadmissible under the health-related grounds.[20] In most cases, the only acceptable edition of Form I-693 is the edition in use at the time the civil surgeon signs the Form I-693. Prior editions of Form I-693 are generally not acceptable because they may lack required information.[21]
+Validity of Form I-693 Signed by a Civil Surgeon On or After November 1, 2023
+Technological advances since November 1, 2023 have enabled civil surgeons to share certain medical data from the Form I-693 directly with CDC electronically[22] and have improved both collaboration between CDC and USCIS and reporting of public health information collected on Form I-693 by civil surgeons to local U.S. health departments. USCIS has determined that, in general, a properly completed Form I-693 that is signed by a civil surgeon[23] on or after November 1, 2023 can only be used as evidence to show that the applicant is not inadmissible under the health-related grounds for the entire period the immigration benefit application with which the Form I-693 is submitted is pending. Limiting the validity of the Form I-693 to the instant immigrant benefit application or request ensures that the immigration medical examination and vaccination results are current and do not reflect outdated findings.
+If the immigration benefit application with which the Form I-693 is submitted is withdrawn or denied, then an applicant needs to submit a newly completed and signed Form I-693 with any future immigration benefit application that requires an alien to demonstrate that he or she is not inadmissible on health-related grounds.
+Validity of Form I-693 Signed by a Civil Surgeon Before November 1, 2023
+Before November 1, 2023, civil surgeons were not required to share or report certain information to CDC electronically. Therefore, USCIS, in consultation with CDC, determined that a properly completed Form I-693 signed by a civil surgeon before November 1, 2023, retains evidentiary value for 2 years from the date of the civil surgeon’s signature.[24]
+USCIS Discretion on Form I-693 Validity
+Even in cases in which an applicant’s Form I-693 is valid as outlined above, if a USCIS officer has reason to believe that the applicant’s medical condition has changed since the civil surgeon signed the Form I-693 or that the Form I-693 does not accurately reflect the applicant’s medical condition such that the applicant could be inadmissible under health-related grounds, then the officer has the discretion to request further evidence or a new or updated Form I-693.[25]
+Burden of Proof
+An officer generally determines that the applicant has met their burden of proof with respect to the health-related grounds of inadmissibility if all of the following criteria are met:
+A USCIS-designated civil surgeon (including a blanket designated civil surgeon) performed the immigration medical examination in accordance with U.S. Department of Health and Human Services regulations, the Technical Instructions for Civil Surgeons, and the instructions for Form I-693;
+The civil surgeon and the applicant both signed and properly completed the current edition of Form I-693 as of the date of the civil surgeon’s signature;[26]
+The applicant submitted the Form I-693 to USCIS in accordance with the form instructions;[27]
+The Form I-693 establishes that the applicant does not have a Class A medical condition and has complied with the vaccination requirements, or is granted a waiver;[28] and
+USCIS confirms Form I-693 is valid when USCIS issues a decision on the underlying immigration benefit application.[29]
+In general, if any one of the above criteria is not met, then the applicant has not met their burden of proof required to establish that they are free of a medical condition that would render them inadmissible to the United States based on the health-related grounds. In such cases, the officer should follow standard operating procedures regarding issuance of a denial or an RFE or Notice of Intent to Deny (NOID) to address the deficiency.
+Special rules may apply to certain applicants who completed immigration medical examinations overseas, including certain nonimmigrant fiancé(e)s or spouses of U.S. citizens (K nonimmigrants), spouses of lawful permanent residents (V nonimmigrants), refugees, and asylee dependents. Such applicants generally do not need to repeat the full immigration medical examination in the United States for purposes of adjustment of status.[30]
+Footnotes
+[^ 1] The Technical Instructions for Panel Physicians may differ slightly from Centers for Disease Control's (CDC) Technical Instructions for Civil Surgeons. As long as the DS form is properly completed, the officer should accept the finding of the consular officer as correct.
+[^ 2] See Chapter 3, Applicability of Medical Examination and Vaccination Requirement [8 USCIS-PM B.3] for specific information on who is required to be examined and to what extent.
+[^ 3] Form I-693 can only be used for immigration benefits that are granted in the United States.
+[^ 4] See INA 232. See 8 CFR 232.
+[^ 5] Some parts of the form may not be required. For example, if an applicant is not required to undergo a chest X-ray in the TB section of the medical examination report, the chest X-ray section would not have to be completed.
+[^ 6] See Subsection 3, Signatures [8 USCIS-PM B.4(C)(3)].
+[^ 7] See Subsection 3, Signatures [8 USCIS-PM B.4(C)(3)].
+[^ 8] See Subsection 3, Signatures [8 USCIS-PM B.4(C)(3)].
+[^ 9] See Subsection 4, Evidence, Validity, USCIS Discretion, and Burden of Proof [8 USCIS-PM B.4(C)(4)].
+[^ 10] USCIS may reject an application package for various reasons, including lack of payment of application fee or the applicant failing to sign the application. If USCIS rejects an application package and returns the application package with the Form I-693 envelope opened and the applicant wishes to file a new application package with the original opened Form I-693, then the applicant may file the original opened Form I-693 and any supporting documentation that was previously included by the civil surgeon in its original envelope with a copy of the rejection notice.
+[^ 11] See CDC’s Technical Instructions for Civil Surgeons.
+[^ 12] As part of completing the new Form I-693, the civil surgeon must ensure that the applicant has signed the applicant’s certification.
+[^ 13] See Volume 9, Waivers and Other Forms of Relief, Part D, Health-Related Grounds of Inadmissibility [9 USCIS-PM D] for more on waivers.
+[^ 14] See Part C, Civil Surgeon Designation and Revocation [8 USCIS-PM C] for more information on the blanket civil surgeon designation for health departments.
+[^ 15] See Part C, Civil Surgeon Designation and Revocation [8 USCIS-PM C] for more information on the blanket civil surgeon designation for military physicians.
+[^ 16] By signing the form, the civil surgeon certifies that they have examined the applicant according to the procedures and requirements outlined in the CDC’s Technical Instructions for Civil Surgeons, Form I-693, and form instructions. Officers do not need to verify whether the civil surgeon instructed the referring physician to check the applicant’s identity.
+[^ 17] See 8 CFR 103.2(a)(2).
+[^ 18] Civil surgeons are, however, still responsible for ensuring that the contractor properly checks the applicant’s ID.
+[^ 19] See CDC’s Tuberculosis Technical Instructions for Civil Surgeons for more information.
+[^ 20] See INA 212(a)(1) and INA 245(a). See 8 CFR 245.5.
+[^ 21] See the Form I-693 webpage for the current and accepted edition or editions of the form.
+[^ 22] Effective November 1, 2023, CDC changed the Tuberculosis Technical Instructions for Civil Surgeons to require civil surgeons enter certain information from Form I-693 into eMedical, an electronic health processing system through which appropriate notifications to the health departments are made, if the applicant is diagnosed with Class A or Class B TB classifications.
+[^ 23] USCIS considers the date the civil surgeon signed the Form I-693 as the date the civil surgeon completed the examination.
+[^ 24] Following consultation with CDC, USCIS considers the documentation of immigration medical examinations completed either in the United States (as documented on Form I-693) or abroad (as documented on DS-7794 or DS-2054) for certain Afghan nationals who arrived in the United States during Operation Allies Welcome (OAW) as valid indefinitely as long as certain conditions are met. For more information, see Chapter 3, Applicability of Medical Examination and Vaccination Requirement, Section B, Special Considerations, Subsection 7, Certain Afghan Nationals Applying for Adjustment of Status After Arriving in the United States During Operation Allies Welcome [8 USCIS-PM B.3(B)(7)].
+[^ 25] See Matter of Arthur (PDF), 16 I&N Dec. 558 (BIA 1978) (The applicant has the burden of proof to establish their admissibility to the United States according to INA 291; the burden never shifts to the government). See Chapter 3, Applicability of Medical Examination and Vaccination Requirement [8 USCIS-PM B.3]. See Volume 1, General Policies and Procedures, Part E, Adjudications, Chapter 8, Discretionary Analysis [1 USCIS-PM E.8] for more information on adjudicative discretion.
+[^ 26] See Section C, Documentation Completed by Civil Surgeon [8 USCIS-PM B.4(C)].
+[^ 27] See Form I-693 and Application to Register Permanent Residence or Adjust Status (Form I-485).
+[^ 28] For more information on determining inadmissibility based on the health-related grounds, see Chapter 5, Review of Overall Findings [8 USCIS-PM B.5] through Chapter 11, Inadmissibility Determination [8 USCIS-PM B.11].
+[^ 29] From November 1, 2018 until December 9, 2021, USCIS considered Form I-693 valid for 2 years from the date of the civil surgeon’s signature, as long as the underlying application was submitted no more than 60 days after the date of that signature. USCIS temporarily waived the 60-day signature requirement beginning December 9, 2021, until USCIS permanently removed it on March 31, 2023. From December 9, 2021 until October 31, 2023, USCIS considered Form I-693 valid for 2 years from the date of the civil surgeon’s signature. From April 4, 2024 until June 11, 2025, Forms I-693 signed by the civil surgeon on or after November 1, 2023 were valid indefinitely to show that the applicant was not inadmissible under the health-related grounds.
+[^ 30] See Chapter 3, Applicability of Medical Examination and Vaccination Requirement [8 USCIS-PM B.3] for more information on these special considerations.
+
+Resources
+
+Legal Authorities
+
+42 CFR 34 - Medical examination of aliens
+
+42 U.S.C. 252 - Medical examination of aliens
+
+INA 212(a)(1) - Health-related grounds
+
+INA 221(d) - Physical examination
+
+INA 232, 8 CFR 232 - Detention of aliens for physical and mental examination
+
+Technical Instructions for Civil Surgeons
+
+Forms
+
+G-1055, Fee Schedule
+
+G-28, Notice of Entry of Appearance as Attorney or Accredited Representative
+
+I-693, Report of Medical Examination and Vaccination Record
+
+Other Materials
+
+How to Use the USCIS Policy Manual Website
+
+Appendices
+
+No appendices available at this time.
+
+Updates
+
+POLICY ALERT - Validity of Report of Immigration Medical Examination and Vaccination Record (Form I-693)
+
+June 11, 2025
+
+U.S. Citizenship and Immigration Services (USCIS) is making a necessary change to its policy to reflect that the Report of Immigration Medical Examination and Vaccination Record (Form I-693) is generally valid only for the immigration benefit application for which it was submitted, such as the Application to Register Permanent Residence or Adjust Status (Form I-485). Current policy jeopardizes public health by allowing the submission of a Form I-693 tied to any previous immigration benefit application or request, which could include instances where the medical examination results are outdated or where aliens failed to follow up on necessary or recommended medical treatment for tuberculosis.
+
+Read More
+
+Affected Sections
+
+8 USCIS-PM B.4 - Chapter 4 - Review of Medical Examination Documentation
+
+Technical Update - Replacing the Term "Noncitizen"
+
+February 26, 2025
+
+This technical update replaces all instances of the term “noncitizen” with “alien” or other appropriate terms throughout the Policy Manual where possible, as used to refer to a person who meets the definition provided in INA 101(a)(3) [“any person not a citizen or national of the United States”], and makes other technical and conforming changes.
+
+Affected Sections
+
+1 USCIS-PM - Volume 1 - General Policies and Procedures
+2 USCIS-PM - Volume 2 - Nonimmigrants
+3 USCIS-PM - Volume 3 - Humanitarian Protection and Parole
+4 USCIS-PM - Volume 4 - Refugees and Asylees
+5 USCIS-PM - Volume 5 - Adoptions
+6 USCIS-PM - Volume 6 - Immigrants
+7 USCIS-PM - Volume 7 - Adjustment of Status
+8 USCIS-PM - Volume 8 - Admissibility
+9 USCIS-PM - Volume 9 - Waivers and Other Forms of Relief
+10 USCIS-PM - Volume 10 - Employment Authorization
+11 USCIS-PM - Volume 11 - Travel and Identity Documents
+12 USCIS-PM - Volume 12 - Citizenship and Naturalization
+
+POLICY ALERT - Immigration Medical Examinations for Certain Afghan Nationals Who Arrived in the United States During Operation Allies Welcome
+
+November 13, 2024
+
+U.S. Citizenship and Immigration Services (USCIS) is updating policy guidance in the USCIS Policy Manual regarding immigration medical examinations completed by certain Afghan nationals who arrived in the United States during Operation Allies Welcome (OAW).
+
+Read More
+
+Affected Sections
+
+8 USCIS-PM B.3 - Chapter 3 - Applicability of Medical Examination and Vaccination Requirement
+8 USCIS-PM B.4 - Chapter 4 - Review of Medical Examination Documentation
+
+POLICY ALERT - Validity of Report of Immigration Medical Examination and Vaccination Record (Form I-693)
+
+April 04, 2024
+
+U.S. Citizenship and Immigration Services (USCIS) is issuing policy guidance in the USCIS Policy Manual regarding the evidentiary value of the Report of Immigration Medical Examination and Vaccination Record (Form I-693).
+
+Read More
+
+Affected Sections
+
+8 USCIS-PM B.4 - Chapter 4 - Review of Medical Examination Documentation
+
+POLICY ALERT - Removal of “60-Day Rule” for Report of Immigration Medical Examination and Vaccination Record (Form I-693)
+
+March 31, 2023
+
+U.S. Citizenship and Immigration Services (USCIS) is issuing policy guidance in the USCIS Policy Manual to remove the requirement that the civil surgeon’s signature on the Report of Immigration Medical Examination and Vaccination Record (Form I-693) be dated no more than 60 days before an applicant files the application for the underlying immigration benefit.
+
+Read More
+
+Affected Sections
+
+8 USCIS-PM B.4 - Chapter 4 - Review of Medical Examination Documentation
+
+POLICY ALERT - Extension of Temporary Waiver of “60-Day Rule” for Report of Medical Examination and Vaccination Record (Form I-693)
+
+September 29, 2022
+
+U.S. Citizenship and Immigration Services (USCIS) is extending the temporary waiver of the requirement that the civil surgeon’s signature on the Report of Medical Examination and Vaccination Record (Form I-693) be dated no more than 60 days before an applicant files the application for the underlying immigration benefit.
+
+Read More
+
+Affected Sections
+
+8 USCIS-PM B.4 - Chapter 4 - Review of Medical Examination Documentation
+
+POLICY ALERT - Temporary Waiver of “60-Day Rule” for Report of Medical Examination and Vaccination Record (Form I-693)
+
+December 09, 2021
+
+U.S. Citizenship and Immigration Services (USCIS) is temporarily waiving the requirement that the civil surgeon’s signature on the Report of Medical Examination and Vaccination Record (Form I-693) be dated no more than 60 days before an applicant files the application for the underlying immigration benefit.
+
+Read More
+
+Affected Sections
+
+8 USCIS-PM B.4 - Chapter 4 - Review of Medical Examination Documentation
+
+Technical Update - End of Temporary Extension of Validity Period of Report of Medical Examination and Vaccination Record (Form I-693)
+
+October 01, 2021
+
+This technical update to Volume 8 removes the temporary extension of the validity period of the Report of Medical Examination and Vaccination Record (Form I-693) announced August 12, 2021. This temporary extension expires October 1, 2021.
+
+Affected Sections
+
+8 USCIS-PM B.4 - Chapter 4 - Review of Medical Examination Documentation
+
+POLICY ALERT - Temporary Extension of Validity Period of Report of Medical Examination and Vaccination Record (Form I-693)
+
+August 12, 2021
+
+U.S. Citizenship and Immigration Services (USCIS) is temporarily extending the validity period of the Report of Medical Examination and Vaccination Record (Form I-693). This temporary extension is effective through September 30, 2021.
+
+Read More
+
+Affected Sections
+
+8 USCIS-PM B.4 - Chapter 4 - Review of Medical Examination Documentation
+
+Technical Update - Replacing the Term “Alien”
+
+May 11, 2021
+
+This technical update replaces all instances of the term “alien” with “noncitizen” or other appropriate terms throughout the Policy Manual where possible, as used to refer to a person who meets the definition provided in INA 101(a)(3) [“any person not a citizen or national of the United States”].
+
+Affected Sections
+
+1 USCIS-PM - Volume 1 - General Policies and Procedures
+2 USCIS-PM - Volume 2 - Nonimmigrants
+6 USCIS-PM - Volume 6 - Immigrants
+7 USCIS-PM - Volume 7 - Adjustment of Status
+8 USCIS-PM - Volume 8 - Admissibility
+9 USCIS-PM - Volume 9 - Waivers and Other Forms of Relief
+10 USCIS-PM - Volume 10 - Employment Authorization
+11 USCIS-PM - Volume 11 - Travel and Identity Documents
+12 USCIS-PM - Volume 12 - Citizenship and Naturalization
+
+Technical Update - Moving the Adjudicator’s Field Manual Content into the USCIS Policy Manual
+
+May 21, 2020
+
+U.S. Citizenship and Immigration Services (USCIS) is updating and incorporating relevant Adjudicator’s Field Manual (AFM) content into the USCIS Policy Manual. As that process is ongoing, USCIS has moved any remaining AFM content to its corresponding USCIS Policy Manual Part, in PDF format, until relevant AFM content has been properly incorporated into the USCIS Policy Manual. To the extent that a provision in the USCIS Policy Manual conflicts with remaining AFM content or Policy Memoranda, the updated information in the USCIS Policy Manual prevails. To find remaining AFM content, see the crosswalk between the AFM and the Policy Manual.
+
+Affected Sections
+
+1 USCIS-PM - Volume 1 - General Policies and Procedures
+2 USCIS-PM - Volume 2 - Nonimmigrants
+3 USCIS-PM - Volume 3 - Humanitarian Protection and Parole
+4 USCIS-PM - Volume 4 - Refugees and Asylees
+5 USCIS-PM - Volume 5 - Adoptions
+6 USCIS-PM - Volume 6 - Immigrants
+7 USCIS-PM - Volume 7 - Adjustment of Status
+8 USCIS-PM - Volume 8 - Admissibility
+9 USCIS-PM - Volume 9 - Waivers and Other Forms of Relief
+11 USCIS-PM - Volume 11 - Travel and Identity Documents
+12 USCIS-PM - Volume 12 - Citizenship and Naturalization
+
+Technical Update - Replacing the Term “Foreign National”
+
+October 08, 2019
+
+This technical update replaces all instances of the term “foreign national” with “alien” throughout the Policy Manual as used to refer to a person who meets the definition provided in INA 101(a)(3) [“any person not a citizen or national of the United States”].
+
+Affected Sections
+
+1 USCIS-PM - Volume 1 - General Policies and Procedures
+2 USCIS-PM - Volume 2 - Nonimmigrants
+6 USCIS-PM - Volume 6 - Immigrants
+7 USCIS-PM - Volume 7 - Adjustment of Status
+8 USCIS-PM - Volume 8 - Admissibility
+9 USCIS-PM - Volume 9 - Waivers and Other Forms of Relief
+10 USCIS-PM - Volume 10 - Employment Authorization
+11 USCIS-PM - Volume 11 - Travel and Identity Documents
+12 USCIS-PM - Volume 12 - Citizenship and Naturalization
+
+POLICY ALERT - Validity of Report of Medical Examination and Vaccination Record (Form I-693)
+
+October 16, 2018
+
+U.S. Citizenship and Immigration Services (USCIS) is updating policy guidance in Volume 8, Part B of the USCIS Policy Manual regarding the period of time during which a Form I-693 submitted in support of a related immigration benefits application is considered valid.
+
+Read More
+
+Affected Sections
+
+8 USCIS-PM B - Part B - Health-Related Grounds of Inadmissibility
+
+POLICY ALERT - Definition of Certain Classes of Medical Conditions and Other Updates Relating to Health-Related Grounds of Inadmissibility
+
+November 02, 2016
+
+U.S. Citizenship and Immigration Services (USCIS) is updating guidance regarding health-related grounds of inadmissibility in accordance with the U.S. Department of Health and Human Services (HHS) rulemaking updating Title 42 of the Code of Federal Regulations, part 34 (42 CFR 34).
+
+Read More
+
+Affected Sections
+
+8 USCIS-PM B - Part B - Health-Related Grounds of Inadmissibility
+
+POLICY ALERT - Validity Period of the Medical Certification on the Report of Medical Examination and Vaccination Record (Form I-693)
+
+May 30, 2014
+
+U.S. Citizenship and Immigration Services (USCIS) is issuing an update to policy guidance in the USCIS Policy Manual addressing the validity period of civil surgeon endorsements on the Report of Medical Examination and Vaccination Record, Form I-693.
+
+Read More
+
+Affected Sections
+
+8 USCIS-PM B.4 - Chapter 4 - Review of Medical Examination Documentation
+
+POLICY ALERT - Health-Related Grounds of Inadmissibility and Waivers
+
+January 28, 2014
+
+U.S. Citizenship and Immigration Services (USCIS) is issuing guidance in the USCIS Policy Manual on the health-related grounds of inadmissibility under INA 212(a)(1) and corresponding waivers under INA 212(g).
+
+Read More
+
+Affected Sections
+
+8 USCIS-PM B - Part B - Health-Related Grounds of Inadmissibility
+9 USCIS-PM D - Part D - Health-Related Grounds of Inadmissibility
+
+0
+
+Current as of May 08, 2026
+
+Previous
+
+Next

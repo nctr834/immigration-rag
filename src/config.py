@@ -15,6 +15,7 @@ LLM_MODEL = "gpt-4o-mini"
 CHUNK_SIZE = 512
 CHUNK_OVERLAP = 50
 TOP_K = 5
+RERANK_POOL = 25  # candidates fetched before the reranker trims to TOP_K
 
 # pgvector table (LlamaIndex prefixes the actual table with "data_")
 PG_TABLE_NAME = "immigration_chunks"
