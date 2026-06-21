@@ -8,19 +8,43 @@
   {
     "id": "q002",
     "question": "Can the Form I-864 Affidavit of Support requirement be waived?",
-    "ground_truth": "TODO: write the verified answer from the I-864 instructions / Policy Manual (e.g., self-petitioners, those credited with 40 qualifying quarters, certain children acquiring citizenship).",
-    "source": "TODO: I-864 instructions / USCIS Policy Manual"
+    "ground_truth": "It is not waived on request, but certain intending immigrants do not need to file Form I-864: (1) those credited with 40 qualifying quarters of work in the U.S. (their own plus, in some cases, a spouse's or parents'); (2) a child who will automatically acquire U.S. citizenship under INA 320 upon admission; (3) self-petitioning widows or widowers (Form I-360); and (4) self-petitioning battered spouses and children (VAWA self-petitioners under Form I-360).",
+    "source": "i-864instr.pdf (Are There Exceptions to Who Needs to Submit Form I-864?)"
   },
   {
     "id": "q003",
     "question": "After entering on a K-1 visa, who must the beneficiary marry to be eligible to adjust status?",
-    "ground_truth": "TODO: write the verified answer (must marry the same K-1 petitioner within 90 days of admission).",
-    "source": "TODO: I-485 instructions / K-1 guidance"
+    "ground_truth": "The K-1 beneficiary must marry the same U.S. citizen petitioner who filed the K-1 petition, within 90 days of admission. Admission on a K-1 is conditioned on marrying that same petitioner within those 90 days; the period cannot be extended. After the marriage, the foreign national applies to USCIS for adjustment of status.",
+    "source": "K1_Process_V11.pdf"
   },
   {
     "id": "q004",
-    "question": "TODO: replace with a real question you had during your K-1 / AOS process.",
-    "ground_truth": "TODO: answer you verified against the source document text.",
-    "source": "TODO: the document you verified it against"
+    "question": "What is the purpose of Form I-129F?",
+    "ground_truth": "Form I-129F, Petition for Alien Fiance(e), is used by a U.S. citizen to classify either an alien fiance(e) as a K-1 nonimmigrant, so they may enter the United States to marry the petitioner and pursue adjustment of status to lawful permanent resident, or an alien spouse as a K-3 nonimmigrant, so they may enter to await the availability of an immigrant visa and pursue adjustment of status.",
+    "source": "i-129finstr.pdf (What is the Purpose of Form I-129F?)"
+  },
+  {
+    "id": "q005",
+    "question": "Who may file Form I-129F for a K-1 fiance(e)?",
+    "ground_truth": "A U.S. citizen may file Form I-129F if both the petitioner and the fiance(e) are legally free to marry and intend to marry within 90 days of the fiance(e)'s admission to the United States, and the two have met in person within the two years immediately before filing the petition, unless the in-person meeting requirement is waived because it would violate strict, long-established customs of the fiance(e)'s culture or would result in extreme hardship to the petitioner.",
+    "source": "i-129finstr.pdf (Who May File Form I-129F?)"
+  },
+  {
+    "id": "q006",
+    "question": "What is Form I-864A and when is it used?",
+    "ground_truth": "Form I-864A, Contract Between Sponsor and Household Member, is an attachment to Form I-864 (Affidavit of Support). It is used when a sponsor relies on a household member's income and/or assets to meet the Affidavit of Support requirements. A separate Form I-864A must be completed for each such household member, and it must be signed by both the sponsor completing Form I-864 and the household member promising to make their income or assets available.",
+    "source": "i-864ainstr.pdf (What Is the Purpose of Form I-864A?)"
+  },
+  {
+    "id": "q007",
+    "question": "When must an applicant file Supplement A to Form I-485 under section 245(i)?",
+    "ground_truth": "Supplement A is filed by an applicant who is disqualified from the normal adjustment of status under INA 245(a) (for example, because of an unlawful entry, unauthorized employment, or not being in lawful status) but who can adjust under INA 245(i). The applicant must be or have been the beneficiary of a qualifying immigrant petition or labor certification properly filed on or before April 30, 2001 (with additional physical-presence conditions for petitions filed after January 14, 1998). Supplement A is filed together with Form I-485, or while a previously filed Form I-485 remains pending.",
+    "source": "i-485supainstr.pdf (What Is the Purpose of Supplement A?)"
+  },
+  {
+    "id": "q008",
+    "question": "Which public benefits does USCIS consider in a public charge inadmissibility determination?",
+    "ground_truth": "USCIS limits the public benefits it considers in a public charge inadmissibility determination to public cash assistance for income maintenance and long-term institutionalization at government expense. Many other programs are not considered, and the guidance provides a non-exhaustive list of programs that are excluded.",
+    "source": "20221219-PublicChargeFinalRule.pdf (Policy Highlights)"
   }
 ]

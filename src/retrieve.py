@@ -8,6 +8,7 @@ embeddings, fused with BM25 keyword matching so exact tokens like form numbers
 from __future__ import annotations
 
 from dataclasses import dataclass
+from functools import lru_cache
 from typing import TYPE_CHECKING
 
 from config import EMBED_MODEL, TOP_K, require_openai_key
@@ -51,8 +52,14 @@ class RetrievedChunk:
     score: float | None  # similarity score, or None when a retriever doesn't expose one
 
 
+@lru_cache(maxsize=None)
 def get_retriever(top_k: int = TOP_K) -> "BaseRetriever":
-    """Return the hybrid vector + BM25 retriever used for all queries."""
+    """Return the hybrid vector + BM25 retriever used for all queries.
+
+    Cached per top_k: reading all chunks from pgvector and building the BM25
+    index is expensive and the corpus is static within a process, so it runs
+    once instead of on every query.
+    """
     require_openai_key()
 
     embed_model = OpenAIEmbedding(model=EMBED_MODEL)
@@ -69,7 +76,7 @@ def get_retriever(top_k: int = TOP_K) -> "BaseRetriever":
         similarity_top_k=top_k,
         mode=FUSION_MODES.RECIPROCAL_RANK,
         num_queries=1,
-        use_async=True,
+        use_async=False,
     )
     return retriever
 

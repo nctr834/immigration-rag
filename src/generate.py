@@ -55,7 +55,7 @@ def generate(question: str) -> Answer:
 
     sources = list(dict.fromkeys(c.source for c in chunks))
     context = _format_context(chunks)
-    llm = OpenAI(model=LLM_MODEL)
+    llm = OpenAI(model=LLM_MODEL, temperature=0)
 
     attempts = 2  # initial attempt + one retry
     for attempt in range(attempts):
