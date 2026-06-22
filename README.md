@@ -58,9 +58,13 @@ Per-query latency (warm caches): about 6s end to end, of which the retrieval
 stage (embed + BM25 + a 25-candidate LLM rerank) is ~4s and generation ~2s. The
 reranker is the dominant cost; on gpt-4o-mini a query is a fraction of a cent.
 
-Two things keep the eval honest. The RAGAS judge is Claude (Anthropic), a
+Two things keep the eval honest. The RAGAS judge can run as Claude (Anthropic), a
 different model family from the gpt-4o-mini generator, so the scores aren't a
-model grading its own output (`eval/run_eval.py`, needs `ANTHROPIC_API_KEY`). And
+model grading its own output (`eval/run_eval.py`, needs `ANTHROPIC_API_KEY`). A
+partial Claude-judged run graded the vector baseline noticeably lower than
+gpt-4o-mini did (context precision 0.92 -> 0.71), confirming the same-family
+tables were optimistic; the independent judge is a ~$4 one-off, not part of CI.
+The default tables above are gpt-4o-mini-judged. And
 a separate out-of-scope set (`eval/eval_set_oos.json`, run with `--oos`) measures
 what matters most for a grounded assistant: whether it refuses questions the
 documents don't cover. It refuses all 8 without fabricating — including a fee

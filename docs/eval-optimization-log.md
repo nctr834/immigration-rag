@@ -190,3 +190,37 @@ both runs, so only the cross-item dimension was newly parallelized. Concurrency 
 was faster still but triggered intermittent OpenAI timeouts, so 4 is the stable
 setting; metric calls also retry transient timeouts, and a per-item failure is
 skipped rather than aborting the whole run.
+
+## Independent judge (Claude vs gpt-4o-mini)
+
+The tables above were graded by gpt-4o-mini, the same model that generates the
+answers. A model grading its own family's output can share its blind spots and
+inflate scores, so the judge was swapped to Claude (a different provider) to test
+whether the numbers survive an independent grader. The generator stays
+gpt-4o-mini; only the RAGAS judge changed.
+
+This run is a documented one-off, not part of CI: the Claude judge makes ~190
+grading calls per full run and costs roughly $4, versus cents for gpt-4o-mini.
+
+Result, stated honestly: the run ran out of Anthropic credits partway through the
+hybrid pass, so the vector baseline was graded over all 24 items but hybrid over
+only 16 (q017-q024 skipped). The baseline-vs-hybrid deltas from this run are
+therefore NOT a clean comparison and are not reported as such.
+
+What the partial run does show clearly is the judge effect, and it's the point of
+the experiment: Claude grades markedly lower than gpt-4o-mini, especially on
+context precision.
+
+| Metric (vector baseline, 24 items) | gpt-4o-mini judge | Claude judge |
+|---|---|---|
+| Faithfulness | 0.95 | 0.93 |
+| Answer relevancy | 0.78 | 0.86 |
+| Context precision | 0.92 | 0.71 |
+| Context recall | 0.92 | 0.86 |
+
+Context precision drops 0.92 -> 0.71 under the stricter judge. The takeaway: the
+absolute scores in the gpt-4o-mini tables were optimistic, context precision most
+of all, which is exactly the risk of grading with the generator's own family. A
+clean re-run of the full hybrid comparison under the Claude judge needs more
+Anthropic credit; the direction (independent judge is harsher) is already the
+useful finding.

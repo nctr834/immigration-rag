@@ -90,7 +90,12 @@ def _build_judge():
     from anthropic import AsyncAnthropic
 
     client = AsyncAnthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
-    return llm_factory(JUDGE_MODEL, provider=JUDGE_PROVIDER, client=client)
+    judge = llm_factory(JUDGE_MODEL, provider=JUDGE_PROVIDER, client=client)
+    # RAGAS sets both temperature and top_p by default; Anthropic rejects sending
+    # both. Drop top_p and keep temperature for deterministic grading.
+    if isinstance(getattr(judge, "model_args", None), dict):
+        judge.model_args.pop("top_p", None)
+    return judge
 
 
 async def evaluate_pipeline(
@@ -376,6 +381,14 @@ def main() -> None:
     base, hyb = results[RetrievalMode.VECTOR], results[RetrievalMode.HYBRID]
 
     all_ids = [i.id for i in items]
+    if len(base) != len(items) or len(hyb) != len(items):
+        # A mode that scored fewer items than requested (e.g. the judge ran out
+        # of credit mid-run) makes the columns incomparable. Say so loudly.
+        print(
+            f"\nWARNING: incomplete run - baseline scored {len(base)}/{len(items)}, "
+            f"hybrid {len(hyb)}/{len(items)}. The deltas below are NOT a clean "
+            f"comparison."
+        )
     label = "rerank ON" if rerank else "rerank OFF"
     _print_table(
         f"Overall ({len(all_ids)} items, {label})",
