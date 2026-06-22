@@ -94,12 +94,19 @@ def get_retriever(
     if mode is RetrievalMode.VECTOR:
         return vector_retriever
 
+    nodes = _load_all_nodes()
+    if not nodes:
+        # BM25 can't build on an empty corpus, and it would raise a cryptic
+        # "pass exactly one of index, nodes, or docstore". Fail clearly instead.
+        raise RuntimeError(
+            "The knowledge base is empty. Run ingest (python ingest.py --extract) "
+            "to load the documents."
+        )
+
     return QueryFusionRetriever(
         [
             vector_retriever,
-            BM25Retriever.from_defaults(
-                nodes=_load_all_nodes(), similarity_top_k=pool
-            ),
+            BM25Retriever.from_defaults(nodes=nodes, similarity_top_k=pool),
         ],
         similarity_top_k=pool,
         mode=FUSION_MODES.RECIPROCAL_RANK,

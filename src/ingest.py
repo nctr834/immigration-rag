@@ -89,6 +89,31 @@ def build_vector_store() -> "PGVectorStore":
     return vector_store
 
 
+def chunk_count() -> int:
+    """How many chunks are stored, or 0 if the table doesn't exist yet.
+
+    A cheap COUNT(*) used to decide whether the DB needs a one-time ingest.
+    LlamaIndex prefixes the configured table name with "data_".
+    """
+    import psycopg2
+
+    conn = psycopg2.connect(
+        host=PG["host"],
+        port=PG["port"],
+        dbname=PG["database"],
+        user=PG["user"],
+        password=PG["password"],
+    )
+    try:
+        with conn.cursor() as cur:
+            cur.execute(f"SELECT count(*) FROM data_{PG_TABLE_NAME}")
+            return cur.fetchone()[0]
+    except psycopg2.errors.UndefinedTable:
+        return 0
+    finally:
+        conn.close()
+
+
 def extract() -> int:
     """Extract every PDF in data/ to a cleaned data/<name>.txt; return file count.
 

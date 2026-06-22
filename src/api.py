@@ -14,6 +14,7 @@ from pydantic import BaseModel, Field
 
 from config import require_openai_key
 from generate import Answer, generate
+from ingest import chunk_count, ingest
 from retrieve import get_retriever
 
 logger = logging.getLogger("immigration_rag")
@@ -21,17 +22,23 @@ logger = logging.getLogger("immigration_rag")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Validate config and warm the retriever before the app serves traffic.
+    """Validate config, populate the DB if empty, and warm the retriever.
 
-    get_retriever() reads every chunk out of pgvector and builds the in-memory
-    BM25 index once (lru cache).
+    On a fresh database (e.g. a new deploy) the chunk table is empty, so ingest
+    the committed data/*.txt once. It's idempotent: if chunks already exist this
+    is a no-op, so restarts don't re-embed. Then get_retriever() builds the
+    in-memory BM25 index once (lru cache).
     """
     require_openai_key()  # fail fast: no point booting without a key
     try:
+        if await run_in_threadpool(chunk_count) == 0:
+            logger.info("empty database; running one-time ingest of data/*.txt")
+            n = await run_in_threadpool(ingest)
+            logger.info("ingested %d chunks", n)
         await run_in_threadpool(get_retriever)
         logger.info("retriever warmed at startup")
     except Exception:
-        logger.exception("retriever warm-up failed; will build lazily on first query")
+        logger.exception("startup ingest/warm-up failed; queries may be unavailable")
     yield
 
 

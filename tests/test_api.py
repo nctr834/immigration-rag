@@ -17,8 +17,11 @@ from generate import Answer
 
 @pytest.fixture
 def client(monkeypatch):
-    # Lifespan warms the retriever (hits pgvector) and checks the key; stub both.
+    # Lifespan checks the key, checks/loads the DB, and warms the retriever; stub
+    # them all so the test suite never touches Postgres, OpenAI, or ingest.
     monkeypatch.setattr(api, "require_openai_key", lambda: "test-key")
+    monkeypatch.setattr(api, "chunk_count", lambda: 1)  # pretend DB is populated
+    monkeypatch.setattr(api, "ingest", lambda: 0)
     monkeypatch.setattr(api, "get_retriever", lambda *a, **k: None)
     with TestClient(api.app) as c:
         yield c
