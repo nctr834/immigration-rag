@@ -209,15 +209,24 @@ async def score_out_of_scope(
 ) -> dict[str, float]:
     """Measure how the system handles questions the corpus does not cover.
 
-    For each out-of-scope question, generate an answer and ask a judge whether it
-    refused (said it doesn't know / isn't covered) or attempted a substantive
-    answer. Returns {refusal_rate, false_answer_rate}. A refusal is the safe
-    behavior; a substantive answer to an uncovered question is a false answer.
+    For each out-of-scope question, generate an answer (gpt-4o-mini) and ask an
+    independent judge (Claude, same as the RAGAS judge) whether it refused or
+    attempted a substantive answer. Returns {refusal_rate, false_answer_rate}. A
+    refusal is the safe behavior; a substantive answer to an uncovered question
+    is a false answer. Using a different family from the generator keeps the
+    judge from rubber-stamping its own output.
     """
     require_openai_key()
+    if not os.getenv("ANTHROPIC_API_KEY"):
+        raise RuntimeError(
+            f"ANTHROPIC_API_KEY is not set; the out-of-scope refusal judge uses "
+            f"the independent {JUDGE_PROVIDER} model ({JUDGE_MODEL})."
+        )
+    from anthropic import AsyncAnthropic
+
     with open(path) as f:
         questions = json.load(f)
-    client = AsyncOpenAI(api_key=os.environ["OPENAI_API_KEY"], timeout=REQUEST_TIMEOUT)
+    judge = AsyncAnthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
     sem = asyncio.Semaphore(concurrency)
 
     async def judge_refusal(question: str, answer: str) -> bool:
@@ -234,12 +243,12 @@ async def score_out_of_scope(
             f"Question: {question}\nAnswer: {answer}\n\n"
             "Reply with exactly one word: REFUSED or ANSWERED."
         )
-        resp = await client.chat.completions.create(
-            model=LLM_MODEL,
-            temperature=0,
+        resp = await judge.messages.create(
+            model=JUDGE_MODEL,
+            max_tokens=8,
             messages=[{"role": "user", "content": prompt}],
         )
-        return resp.choices[0].message.content.strip().upper().startswith("REFUS")
+        return resp.content[0].text.strip().upper().startswith("REFUS")
 
     async def run_one(q: dict) -> bool:
         async with sem:
@@ -255,7 +264,7 @@ async def score_out_of_scope(
             return refused
 
     refusals = await asyncio.gather(*(run_one(q) for q in questions))
-    await client.close()
+    await judge.close()
     n = len(refusals)
     refused = sum(refusals)
     return {

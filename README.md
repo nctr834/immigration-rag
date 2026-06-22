@@ -67,10 +67,10 @@ tables were optimistic; the independent judge is a ~$4 one-off, not part of CI.
 The default tables above are gpt-4o-mini-judged. And
 a separate out-of-scope set (`eval/eval_set_oos.json`, run with `--oos`) measures
 what matters most for a grounded assistant: whether it refuses questions the
-documents don't cover. It refuses all 8 without fabricating — including a fee
-question, where it points to the USCIS fee schedule rather than inventing a
-number (redirecting to the right source counts as a refusal, since it gives no
-unsupported answer).
+documents don't cover. Its refusal classifier is also Claude, independent of the
+generator. It refuses all 8 without fabricating — including a fee question, where
+it points to the USCIS fee schedule rather than inventing a number (redirecting
+to the right source counts as a refusal, since it gives no unsupported answer).
 
 ## Architecture decisions
 
