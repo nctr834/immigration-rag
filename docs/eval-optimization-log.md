@@ -141,10 +141,10 @@ Overall (24 items, rerank off):
 
 | Metric | Baseline (vector) | Hybrid (vec+BM25) | delta |
 |---|---|---|---|
-| Faithfulness | 0.95 | 0.97 | +0.01 |
-| Answer relevancy | 0.78 | 0.83 | +0.04 |
+| Faithfulness | 0.95 | 0.97 | +0.02 |
+| Answer relevancy | 0.78 | 0.83 | +0.05 |
 | Context precision | 0.92 | 0.94 | +0.02 |
-| Context recall | 0.92 | 0.93 | +0.02 |
+| Context recall | 0.92 | 0.93 | +0.01 |
 
 The gains are modest but consistent. The per-type breakdown is the interesting
 part, and it contradicted the original hypothesis:
@@ -154,7 +154,7 @@ part, and it contradicted the original hypothesis:
 | exact-token (7) | context precision | 0.96 | 0.94 | -0.02 |
 | exact-token (7) | context recall | 0.95 | 0.95 | +0.00 |
 | conceptual (9) | context precision | 0.91 | 0.99 | +0.08 |
-| conceptual (9) | context recall | 0.92 | 0.96 | +0.05 |
+| conceptual (9) | context recall | 0.92 | 0.96 | +0.04 |
 
 The hypothesis was that BM25 helps on exact form numbers ("I-864" vs "I-864A").
 The data says the opposite: the embedding model already handles form numbers, so

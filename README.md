@@ -7,9 +7,9 @@ actual instruction documents, with citations.
 
 I built this while going through the K-1 fiancé visa process. The instructions
 are long, cross-referenced PDFs (the I-485 instructions alone run 40+ pages), and
-answering one question could mean reading all of them to find the paragraph that
-applies. This indexes the forms and answers directly, pointing back to the
-source so the answer is checkable.
+answering one question could mean skimming through all of them to find the
+paragraph that applies. This indexes the forms and answers directly, pointing
+back to the source so the answer is checkable.
 
 **Live demo:** https://immigration-rag.onrender.com/ui
 (free tier; first request after idle takes ~30s to wake)
