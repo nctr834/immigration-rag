@@ -1,5 +1,7 @@
 # Immigration RAG
 
+[![tests](https://github.com/nctr834/immigration-rag/actions/workflows/tests.yml/badge.svg)](https://github.com/nctr834/immigration-rag/actions/workflows/tests.yml)
+
 Ask questions about USCIS immigration forms and get answers grounded in the
 actual instruction documents, with citations.
 
@@ -9,10 +11,11 @@ answering one question often means reading all of them to find the paragraph tha
 applies. This indexes the forms and answers directly, pointing back to the
 source so the answer is checkable.
 
-**Live demo:** <!-- paste the Render URL once deployed -->
+**Live demo:** https://immigration-rag.onrender.com/ui
+(free tier; first request after idle takes ~30s to wake)
 
 ```bash
-curl -X POST https://<your-app>.onrender.com/query \
+curl -X POST https://immigration-rag.onrender.com/query \
   -H 'content-type: application/json' \
   -d '{"question": "Can the I-864 be waived?"}'
 ```
