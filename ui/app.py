@@ -25,7 +25,7 @@ EXAMPLES = [
 
 
 def ask(question: str) -> tuple[str, str]:
-    """Answer the question and return (answer, sources-as-markdown)."""
+    """Answer the question and return (answer, sources+disclaimer-as-markdown)."""
     question = (question or "").strip()
     if not question:
         return "Enter a question.", ""
@@ -33,7 +33,13 @@ def ask(question: str) -> tuple[str, str]:
         result = generate(question)
     except Exception as e:  # surface the error in the UI rather than 500-ing
         return f"Error: {e}", ""
-    sources_md = "\n".join(f"- {s}" for s in result.sources) if result.sources else "_none_"
+    if result.sources:
+        sources_md = "\n".join(
+            f'- **{c.source}** — "{c.quote}"' for c in result.sources
+        )
+    else:
+        sources_md = "_none_"
+    sources_md += f"\n\n_{result.disclaimer}_"
     return result.answer, sources_md
 
 

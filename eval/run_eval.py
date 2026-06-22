@@ -35,11 +35,18 @@ from ragas.metrics.collections import (
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from config import EMBED_MODEL, LLM_MODEL, require_openai_key
+from config import (
+    EMBED_MODEL,
+    JUDGE_MODEL,
+    JUDGE_PROVIDER,
+    LLM_MODEL,
+    require_openai_key,
+)
 from generate import generate
 from retrieve import RetrievalMode, retrieve
 
 EVAL_SET = os.path.join(os.path.dirname(__file__), "eval_set.json")
+OOS_SET = os.path.join(os.path.dirname(__file__), "eval_set_oos.json")
 MAX_CONCURRENCY = 4  # overridden to 1 by --serial, for measuring the parallel speedup
 REQUEST_TIMEOUT = 60.0  # per-request OpenAI timeout; the default is short under load
 
@@ -68,6 +75,24 @@ METRIC_NAMES = (
 )
 
 
+def _build_judge():
+    """Build the RAGAS judge LLM from an independent provider (Anthropic).
+
+    Kept separate from the generator (gpt-4o-mini) so the eval isn't a model
+    grading its own family. Requires ANTHROPIC_API_KEY.
+    """
+    if not os.getenv("ANTHROPIC_API_KEY"):
+        raise RuntimeError(
+            f"ANTHROPIC_API_KEY is not set; it's needed for the independent "
+            f"{JUDGE_PROVIDER} judge ({JUDGE_MODEL}). Set it, or change "
+            f"JUDGE_PROVIDER/JUDGE_MODEL in config."
+        )
+    from anthropic import AsyncAnthropic
+
+    client = AsyncAnthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+    return llm_factory(JUDGE_MODEL, provider=JUDGE_PROVIDER, client=client)
+
+
 async def evaluate_pipeline(
     items: list[EvalItem],
     mode: RetrievalMode,
@@ -87,7 +112,9 @@ async def evaluate_pipeline(
     client = AsyncOpenAI(
         api_key=os.environ["OPENAI_API_KEY"], timeout=REQUEST_TIMEOUT
     )
-    llm = llm_factory(LLM_MODEL, client=client, temperature=0)
+    # Embeddings (only AnswerRelevancy needs them) stay on OpenAI; the judge LLM
+    # is an independent provider so it isn't grading its own family's output.
+    llm = _build_judge()
     embeddings = cast(
         BaseRagasEmbedding,
         embedding_factory("openai", model=EMBED_MODEL, client=client),
@@ -172,6 +199,61 @@ async def compare_modes(
     }
 
 
+async def score_out_of_scope(
+    path: str = OOS_SET, concurrency: int = MAX_CONCURRENCY
+) -> dict[str, float]:
+    """Measure how the system handles questions the corpus does not cover.
+
+    For each out-of-scope question, generate an answer and ask a judge whether it
+    refused (said it doesn't know / isn't covered) or attempted a substantive
+    answer. Returns {refusal_rate, false_answer_rate}. A refusal is the safe
+    behavior; a substantive answer to an uncovered question is a false answer.
+    """
+    require_openai_key()
+    with open(path) as f:
+        questions = json.load(f)
+    client = AsyncOpenAI(api_key=os.environ["OPENAI_API_KEY"], timeout=REQUEST_TIMEOUT)
+    sem = asyncio.Semaphore(concurrency)
+
+    async def judge_refusal(question: str, answer: str) -> bool:
+        prompt = (
+            "A question was asked of an assistant restricted to a fixed set of "
+            "USCIS immigration documents. Decide whether the assistant REFUSED "
+            "(said it does not know, or that the documents do not cover this) or "
+            "ATTEMPTED a substantive answer to the question.\n\n"
+            f"Question: {question}\nAnswer: {answer}\n\n"
+            "Reply with exactly one word: REFUSED or ANSWERED."
+        )
+        resp = await client.chat.completions.create(
+            model=LLM_MODEL,
+            temperature=0,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        return resp.choices[0].message.content.strip().upper().startswith("REFUS")
+
+    async def run_one(q: dict) -> bool:
+        async with sem:
+            try:
+                answer = (await asyncio.to_thread(generate, q["question"])).answer
+            except ValueError:
+                # retrieve/rerank returned nothing for this question; generate
+                # raises rather than answer ungrounded. That is a refusal.
+                print(f"{q['id']}: REFUSED (no chunks) - {q['question']}")
+                return True
+            refused = await judge_refusal(q["question"], answer)
+            print(f"{q['id']}: {'REFUSED' if refused else 'ANSWERED'} - {q['question']}")
+            return refused
+
+    refusals = await asyncio.gather(*(run_one(q) for q in questions))
+    await client.close()
+    n = len(refusals)
+    refused = sum(refusals)
+    return {
+        "refusal_rate": refused / n,
+        "false_answer_rate": (n - refused) / n,
+    }
+
+
 def _run(coro):
     """Run coro, then drain pending tasks before closing the loop.
 
@@ -224,19 +306,64 @@ def _print_table(title: str, base: dict[str, float], hyb: dict[str, float]) -> N
         print(f"{_LABELS[name]:<18}{b:>20.2f}{h:>20.2f}{h - b:>+10.2f}")
 
 
+def _run_repeated(
+    items: list[EvalItem], rerank: bool, concurrency: int, repeats: int
+) -> None:
+    """Run the comparison `repeats` times; print each metric's mean and spread.
+
+    The point is to show whether small deltas are stable or just judge noise: if
+    the spread across runs is as large as the delta, the delta isn't meaningful.
+    """
+    ids = [i.id for i in items]
+    per_metric: dict[str, list[float]] = {f"{m}_{k}": [] for m in ("base", "hyb") for k in METRIC_NAMES}
+    for r in range(repeats):
+        print(f"\n--- repeat {r + 1}/{repeats} ---")
+        results = _run(compare_modes(items, rerank, concurrency))
+        base = _averages(results[RetrievalMode.VECTOR], ids)
+        hyb = _averages(results[RetrievalMode.HYBRID], ids)
+        for k in METRIC_NAMES:
+            per_metric[f"base_{k}"].append(base[k])
+            per_metric[f"hyb_{k}"].append(hyb[k])
+
+    def stats(vals: list[float]) -> str:
+        return f"{sum(vals) / len(vals):.2f} (spread {max(vals) - min(vals):.2f})"
+
+    print(f"\nAcross {repeats} runs ({len(ids)} items, "
+          f"rerank {'ON' if rerank else 'OFF'}):")
+    print(f"{'Metric':<18}{'Baseline':>22}{'Hybrid':>22}")
+    for k in METRIC_NAMES:
+        print(f"{_LABELS[k]:<18}{stats(per_metric['base_' + k]):>22}{stats(per_metric['hyb_' + k]):>22}")
+
+
 def main() -> None:
     """Score baseline vs hybrid and print the comparison table.
 
     Flags: --rerank turns the production reranker on (default off, so the table
     isolates retrieval mode); --serial forces concurrency=1, for measuring the
-    parallel speedup against the default; --limit N runs only the first N items.
+    parallel speedup against the default; --limit N runs only the first N items;
+    --oos runs the out-of-scope refusal eval instead of the comparison table;
+    --repeat N runs the comparison N times and reports mean +/- spread, to show
+    whether small deltas survive run-to-run judge noise.
     """
+    if "--oos" in sys.argv:
+        scores = _run(score_out_of_scope())
+        print(
+            f"\nRefusal rate:       {scores['refusal_rate']:.0%}"
+            f"\nFalse-answer rate:  {scores['false_answer_rate']:.0%}"
+        )
+        return
+
     rerank = "--rerank" in sys.argv
     concurrency = 1 if "--serial" in sys.argv else MAX_CONCURRENCY
     items = load_eval_set()
     if "--limit" in sys.argv:
         n = int(sys.argv[sys.argv.index("--limit") + 1])
         items = items[:n]
+
+    if "--repeat" in sys.argv:
+        repeats = int(sys.argv[sys.argv.index("--repeat") + 1])
+        _run_repeated(items, rerank, concurrency, repeats)
+        return
 
     started = time.monotonic()
     results = _run(compare_modes(items, rerank, concurrency))

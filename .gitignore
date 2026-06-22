@@ -13,6 +13,7 @@ __pycache__/
 data/*
 !data/.gitkeep
 !data/*.txt
+!data/SOURCES.md
 
 # Eval outputs
 eval/results/

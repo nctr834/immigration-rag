@@ -49,8 +49,32 @@ def test_sources_come_only_from_retrieved_chunks(monkeypatch):
     answer = gen.generate("Can the I-864 be waived?")
 
     assert isinstance(answer, Answer)
-    assert answer.sources == ["i-864instr.txt", "K1_Process_V11.txt"]
-    assert "made-up-doc.pdf" not in answer.sources
+    assert [c.source for c in answer.sources] == ["i-864instr.txt", "K1_Process_V11.txt"]
+    # The made-up filename the LLM mentioned must not leak into the citations.
+    assert all("made-up-doc.pdf" != c.source for c in answer.sources)
+
+
+def test_citation_quotes_are_grounded_in_retrieved_text(monkeypatch):
+    chunks = _chunks()
+    monkeypatch.setattr(gen, "retrieve", lambda *a, **k: chunks)
+    monkeypatch.setattr(gen, "require_openai_key", lambda: "test-key")
+    _fake_llm(monkeypatch)
+
+    answer = gen.generate("q")
+    for cite in answer.sources:
+        chunk_text = next(c.text for c in chunks if c.source == cite.source)
+        # quote is a verbatim (whitespace-normalized) prefix of the chunk text
+        assert cite.quote in " ".join(chunk_text.split())
+
+
+def test_answer_carries_disclaimer(monkeypatch):
+    monkeypatch.setattr(gen, "retrieve", lambda *a, **k: _chunks())
+    monkeypatch.setattr(gen, "require_openai_key", lambda: "test-key")
+    _fake_llm(monkeypatch)
+
+    answer = gen.generate("q")
+    assert answer.disclaimer == gen.DISCLAIMER
+    assert "not legal advice" in answer.disclaimer.lower()
 
 
 def test_sources_are_deduplicated_preserving_order(monkeypatch):
@@ -64,7 +88,7 @@ def test_sources_are_deduplicated_preserving_order(monkeypatch):
     _fake_llm(monkeypatch)
 
     answer = gen.generate("q")
-    assert answer.sources == ["i-864instr.txt", "K1_Process_V11.txt"]
+    assert [c.source for c in answer.sources] == ["i-864instr.txt", "K1_Process_V11.txt"]
 
 
 def test_no_chunks_raises(monkeypatch):

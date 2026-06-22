@@ -1,0 +1,42 @@
+[
+  {
+    "id": "oos001",
+    "question": "How long does it take to become a U.S. citizen through naturalization?",
+    "why_uncovered": "Naturalization (Form N-400) timelines are not in the corpus, which covers K-1/fiance, adjustment of status, and affidavit of support."
+  },
+  {
+    "id": "oos002",
+    "question": "How do I apply for asylum in the United States?",
+    "why_uncovered": "Asylum (Form I-589) is not in the corpus."
+  },
+  {
+    "id": "oos003",
+    "question": "Am I eligible for DACA and how do I renew it?",
+    "why_uncovered": "DACA is not covered by any indexed document."
+  },
+  {
+    "id": "oos004",
+    "question": "What is the current filing fee for Form I-485?",
+    "why_uncovered": "The indexed I-485 instructions excerpt does not state a dollar fee amount; fees are published separately on the USCIS fee schedule."
+  },
+  {
+    "id": "oos005",
+    "question": "How do I apply for an employment authorization document (EAD)?",
+    "why_uncovered": "Form I-765 / EAD application is not in the corpus."
+  },
+  {
+    "id": "oos006",
+    "question": "What are the requirements for an H-1B work visa?",
+    "why_uncovered": "H-1B / employment nonimmigrant petitions are not in the corpus (which covers K-class fiance/spouse petitions only)."
+  },
+  {
+    "id": "oos007",
+    "question": "How do I renew my green card with Form I-90?",
+    "why_uncovered": "Green card renewal (Form I-90) is not in the corpus."
+  },
+  {
+    "id": "oos008",
+    "question": "What is the weather like in San Francisco today?",
+    "why_uncovered": "Completely out of domain; a control to confirm the system refuses non-immigration questions."
+  }
+]

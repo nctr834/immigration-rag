@@ -47,10 +47,25 @@ of experiments.
 
 The deployed system adds an LLM reranker on top of hybrid retrieval. Against the
 vector baseline, the full system (hybrid + reranking together) scores answer
-relevancy 0.83 (up from 0.78), context precision 0.97 (up from 0.92), context
-recall 0.96 (up from 0.92), and faithfulness 0.93 (down from 0.95). The reranker
-changes individual rankings more than it changes the averages: on one question it
-moved the answering chunk from rank 16 to rank 1 (see the optimization log).
+relevancy 0.83 (from 0.78), context precision 0.97 (from 0.92), context recall
+0.96 (from 0.92), and faithfulness 0.93 (from 0.95). The faithfulness move is
+within run-to-run noise on 24 items, so I don't read it as a real trade. The
+reranker's value shows in individual rankings rather than the averages: on one
+question it moved the answering chunk from rank 16 to rank 1 (see the
+optimization log).
+
+Per-query latency (warm caches): about 6s end to end, of which the retrieval
+stage (embed + BM25 + a 25-candidate LLM rerank) is ~4s and generation ~2s. The
+reranker is the dominant cost; on gpt-4o-mini a query is a fraction of a cent.
+
+Two things keep the eval honest. The RAGAS judge is Claude (Anthropic), a
+different model family from the gpt-4o-mini generator, so the scores aren't a
+model grading its own output (`eval/run_eval.py`, needs `ANTHROPIC_API_KEY`). And
+a separate out-of-scope set (`eval/eval_set_oos.json`, run with `--oos`) measures
+what matters most for a grounded assistant: whether it refuses questions the
+documents don't cover. It refuses 7 of 8; the one it answers points to where the
+fee schedule lives rather than inventing a number, so even the "miss" doesn't
+fabricate.
 
 ## Architecture decisions
 
@@ -79,10 +94,15 @@ that straddles a boundary from being cut in half. The size was fixed rather than
 tuned: with a corpus this small, chunk-size sweeps overfit the eval set, and the
 retrieval gains came from hybrid search and reranking, not chunk size.
 
-**Structured output with one retry.** The model returns a Pydantic
-`Answer{answer, sources}` object that gets validated; a malformed response is
-retried once before failing. Raw LLM JSON is not reliable enough to trust
-unvalidated in a request path.
+**Structured output with one retry.** The model returns a validated Pydantic
+`Answer` (the prose plus a disclaimer); a malformed response is retried once
+before failing. Raw LLM JSON is not reliable enough to trust unvalidated in a
+request path.
+
+**Citations are built, not generated.** The model produces only the prose. Each
+source citation (file + a verbatim quoted passage) is attached from the chunks
+that were actually retrieved, so a citation can't be hallucinated and the quote
+lets a reader check the answer against the source text.
 
 ## What the eval caught
 
@@ -105,8 +125,8 @@ splits the `.txt` into 512-token chunks (50-token overlap), embeds them with
 `text-embedding-3-small`, and stores the vectors in pgvector. The cleaned `.txt`
 is committed as the source of truth; the raw PDFs are not. A query fetches a pool
 of candidates (hybrid vector + BM25), an LLM reranker keeps the top 5, and
-`gpt-4o-mini` generates a structured `Answer{answer, sources}` returned over
-`POST /query`.
+`gpt-4o-mini` generates a structured `Answer` (prose + citations with quoted
+passages + a disclaimer) returned over `POST /query`.
 
 ## Stack
 

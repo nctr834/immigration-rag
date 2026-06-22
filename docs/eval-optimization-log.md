@@ -146,6 +146,14 @@ Overall (24 items, rerank off):
 | Context precision | 0.92 | 0.94 | +0.02 |
 | Context recall | 0.92 | 0.93 | +0.01 |
 
+Caveat on significance: this is one run of 24 self-authored items graded by an
+LLM, so the scores carry run-to-run noise. Deltas below about 0.05 are
+directional, not significant — read the overall faithfulness/precision/recall
+gains as "hybrid is no worse and probably a bit better," not as firm
+measurements. The conceptual context-precision gain (+0.08) is the one delta
+clearly outside that noise band. Use `run_eval.py --repeat N` to see the spread
+across runs.
+
 The gains are modest but consistent. The per-type breakdown is the interesting
 part, and it contradicted the original hypothesis:
 

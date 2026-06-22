@@ -1,8 +1,9 @@
 """Answer a question from its retrieved chunks as a validated, sourced object.
 
   - LLM: gpt-4o-mini (see config.LLM_MODEL).
-  - The model returns a structured answer; sources are filled from the chunks
-    that were actually retrieved, so citations can't be hallucinated.
+  - The model returns a structured answer; citations are filled from the chunks
+    that were actually retrieved (file + a quoted passage), so they can't be
+    hallucinated and the answer is checkable against the source text.
   - On a malformed or non-validating response, retry exactly once, then raise, so
     the system never returns an unvalidated answer.
 """
@@ -14,6 +15,18 @@ from pydantic import BaseModel, ValidationError
 
 from config import LLM_MODEL, require_openai_key
 from retrieve import RetrievalMode, RetrievedChunk, retrieve
+
+# Shown with every answer. The corpus is a snapshot of USCIS documents, not a
+# live feed, and this is not legal advice; say so in the payload so the output
+# never implies otherwise.
+DISCLAIMER = (
+    "Based on a snapshot of USCIS instruction documents, which may be out of "
+    "date. Verify against current USCIS guidance. This is not legal advice."
+)
+
+# How much of a chunk to quote in a citation. Long enough to locate the passage
+# in the source document, short enough to stay a pointer rather than a dump.
+QUOTE_CHARS = 240
 
 SYSTEM = (
     "You are an immigration-forms assistant. Answer the question using ONLY the "
@@ -34,15 +47,41 @@ class _LLMAnswer(BaseModel):
     answer: str
 
 
+class Citation(BaseModel):
+    """A retrieved source: the document plus a quoted passage to check against."""
+
+    source: str  # source document filename
+    quote: str  # an excerpt from the retrieved chunk, so the answer is verifiable
+
+
 class Answer(BaseModel):
-    """The response contract shared with the API: the prose answer + the docs it used."""
+    """The response contract shared with the API: the answer, its citations, a disclaimer."""
 
     answer: str
-    sources: list[str]
+    sources: list[Citation]
+    disclaimer: str = DISCLAIMER
 
 
 def _format_context(chunks: list[RetrievedChunk]) -> str:
     return "\n\n".join(f"[{c.source}]\n{c.text}" for c in chunks)
+
+
+def _citations(chunks: list[RetrievedChunk]) -> list[Citation]:
+    """One citation per source document, quoting its highest-ranked chunk.
+
+    chunks arrive in rank order, so the first chunk seen for a source is its
+    best-matching passage. The quote is taken verbatim from the retrieved text,
+    not from the LLM, so it can't be fabricated.
+    """
+    citations: list[Citation] = []
+    seen: set[str] = set()
+    for c in chunks:
+        if c.source in seen:
+            continue
+        seen.add(c.source)
+        quote = " ".join(c.text.split())[:QUOTE_CHARS].strip()
+        citations.append(Citation(source=c.source, quote=quote))
+    return citations
 
 
 def generate(
@@ -61,7 +100,7 @@ def generate(
     if not chunks:
         raise ValueError(f"No chunks found for question: {question}")
 
-    sources = list(dict.fromkeys(c.source for c in chunks))
+    sources = _citations(chunks)
     context = _format_context(chunks)
     llm = OpenAI(model=LLM_MODEL, temperature=0)
 

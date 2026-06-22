@@ -12,7 +12,7 @@ from fastapi.testclient import TestClient
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
 import api
-from generate import Answer
+from generate import Answer, Citation
 
 
 @pytest.fixture
@@ -39,13 +39,19 @@ def test_root_redirects_to_ui(client):
     assert resp.headers["location"] == "/ui"
 
 
-def test_query_returns_answer_with_sources(client):
-    fake = Answer(answer="K nonimmigrants generally do not repeat the exam.", sources=["x.txt"])
+def test_query_returns_answer_with_citations_and_disclaimer(client):
+    fake = Answer(
+        answer="K nonimmigrants generally do not repeat the exam.",
+        sources=[Citation(source="x.txt", quote="do not repeat the exam")],
+    )
     with patch.object(api, "generate", return_value=fake) as mock_gen:
         resp = client.post("/query", json={"question": "carry over?"})
 
     assert resp.status_code == 200
-    assert resp.json() == {"answer": fake.answer, "sources": ["x.txt"]}
+    body = resp.json()
+    assert body["answer"] == fake.answer
+    assert body["sources"] == [{"source": "x.txt", "quote": "do not repeat the exam"}]
+    assert "not legal advice" in body["disclaimer"].lower()
     mock_gen.assert_called_once_with("carry over?")
 
 

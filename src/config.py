@@ -11,7 +11,12 @@ load_dotenv()
 
 EMBED_MODEL = "text-embedding-3-small"
 EMBED_DIM = 1536  # text-embedding-3-small output dimension
-LLM_MODEL = "gpt-4o-mini"
+LLM_MODEL = "gpt-4o-mini"  # generation + reranking
+# The eval judge. Deliberately a different provider from the generator so the
+# RAGAS scores aren't a model grading its own family's output. Requires
+# ANTHROPIC_API_KEY when the judged eval is run.
+JUDGE_MODEL = "claude-sonnet-4-6"
+JUDGE_PROVIDER = "anthropic"
 CHUNK_SIZE = 512
 CHUNK_OVERLAP = 50
 TOP_K = 5

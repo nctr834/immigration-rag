@@ -2,3 +2,4 @@
 -r requirements.txt
 pytest==9.1.1
 httpx==0.28.1  # FastAPI's TestClient needs it; not a runtime API dependency
+anthropic==0.111.0  # independent RAGAS judge for eval/run_eval.py; not used at runtime

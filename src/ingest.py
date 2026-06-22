@@ -17,6 +17,7 @@ is left untouched by extract() and still ingested.
 from __future__ import annotations
 
 import glob
+import logging
 import os
 import re
 import sys
@@ -26,6 +27,8 @@ from llama_index.core import SimpleDirectoryReader, VectorStoreIndex, StorageCon
 from llama_index.core.node_parser import SentenceSplitter
 from llama_index.embeddings.openai import OpenAIEmbedding
 from llama_index.vector_stores.postgres import PGVectorStore
+
+logger = logging.getLogger("immigration_rag")
 
 from config import (
     CHUNK_OVERLAP,
@@ -151,7 +154,9 @@ def ingest() -> int:
     try:
         vector_store.clear()
     except Exception:
-        pass
+        # Non-fatal (the table may not exist on a first run), but log it: a
+        # silently-failed clear can leave stale chunks mixed with the fresh ones.
+        logger.warning("vector_store.clear() failed; proceeding", exc_info=True)
     storage_context = StorageContext.from_defaults(vector_store=vector_store)
     VectorStoreIndex(
         nodes=nodes,
