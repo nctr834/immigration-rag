@@ -30,6 +30,12 @@ def test_health(client):
     assert resp.json() == {"status": "ok"}
 
 
+def test_root_redirects_to_ui(client):
+    resp = client.get("/", follow_redirects=False)
+    assert resp.status_code in (307, 308)
+    assert resp.headers["location"] == "/ui"
+
+
 def test_query_returns_answer_with_sources(client):
     fake = Answer(answer="K nonimmigrants generally do not repeat the exam.", sources=["x.txt"])
     with patch.object(api, "generate", return_value=fake) as mock_gen:

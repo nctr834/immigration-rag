@@ -9,6 +9,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException
 from fastapi.concurrency import run_in_threadpool
+from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, Field
 
 from config import require_openai_key
@@ -49,6 +50,12 @@ class QueryRequest(BaseModel):
     """The request contract: a single natural-language question."""
 
     question: str = Field(min_length=1, max_length=1000)
+
+
+@app.get("/", include_in_schema=False)
+def root() -> RedirectResponse:
+    """Send the bare URL to the UI so visitors land on the demo, not a 404."""
+    return RedirectResponse(url="/ui")
 
 
 @app.get("/health")
