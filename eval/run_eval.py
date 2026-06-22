@@ -218,9 +218,14 @@ async def score_out_of_scope(
     async def judge_refusal(question: str, answer: str) -> bool:
         prompt = (
             "A question was asked of an assistant restricted to a fixed set of "
-            "USCIS immigration documents. Decide whether the assistant REFUSED "
-            "(said it does not know, or that the documents do not cover this) or "
-            "ATTEMPTED a substantive answer to the question.\n\n"
+            "USCIS immigration documents. Classify the answer:\n"
+            "- REFUSED: it declines, says it doesn't know, says the documents "
+            "don't cover this, or redirects elsewhere (e.g. 'see the USCIS fee "
+            "schedule') WITHOUT giving a substantive factual answer. Pointing to "
+            "another source instead of answering counts as REFUSED.\n"
+            "- ANSWERED: it gives a substantive factual answer to the question "
+            "(the dangerous case is a confident answer the documents don't "
+            "support).\n\n"
             f"Question: {question}\nAnswer: {answer}\n\n"
             "Reply with exactly one word: REFUSED or ANSWERED."
         )

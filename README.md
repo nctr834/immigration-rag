@@ -63,9 +63,10 @@ different model family from the gpt-4o-mini generator, so the scores aren't a
 model grading its own output (`eval/run_eval.py`, needs `ANTHROPIC_API_KEY`). And
 a separate out-of-scope set (`eval/eval_set_oos.json`, run with `--oos`) measures
 what matters most for a grounded assistant: whether it refuses questions the
-documents don't cover. It refuses 7 of 8; the one it answers points to where the
-fee schedule lives rather than inventing a number, so even the "miss" doesn't
-fabricate.
+documents don't cover. It refuses all 8 without fabricating — including a fee
+question, where it points to the USCIS fee schedule rather than inventing a
+number (redirecting to the right source counts as a refusal, since it gives no
+unsupported answer).
 
 ## Architecture decisions
 
